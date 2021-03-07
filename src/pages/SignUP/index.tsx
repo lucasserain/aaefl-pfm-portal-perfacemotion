@@ -3,6 +3,7 @@ import React, { useCallback, useEffect } from 'react';
 import { FiMail, FiLock, FiUser, FiArrowLeft } from 'react-icons/fi';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
+import { Link } from 'react-router-dom';
 import { Container, Content, Background } from './styles';
 import logoImg from '../../assets/logo_small.png';
 
@@ -70,10 +71,10 @@ const SignUp: React.FC = () => {
           </div>
           <Button type="submit">Cadastrar</Button>
         </Form>
-        <a href="login">
+        <Link to="/">
           <FiArrowLeft />
           Voltar para login
-        </a>
+        </Link>
       </Content>
       <Background />
     </Container>
