@@ -5,12 +5,13 @@ import SignIn from '../pages/SignIn/index';
 import SignUp from '../pages/SignUP/index';
 import Dashboard from '../pages/Dashboard/index';
 import Route from './routes';
+import App from '../pages/Recorder/App.js';
 
 const Routes: React.FC = () => (
   <Switch>
     <Route path="/" exact component={SignIn} />
     <Route path="/signup" component={SignUp} />
-    <Route path="/dashboard" component={Dashboard} isPrivate />
+    <Route path="/dashboard" component={App} />
   </Switch>
 );
 
