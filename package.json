@@ -18,8 +18,11 @@
     "@types/uuid": "^8.3.0",
     "@unform/core": "^2.1.6",
     "@unform/web": "^2.1.6",
+    "add": "^2.0.6",
     "aws-sdk": "^2.863.0",
     "axios": "^0.21.1",
+    "kafka-node": "^5.0.0",
+    "kafkajs": "^1.15.0",
     "mime": "^2.5.2",
     "polished": "^4.1.1",
     "react": "^17.0.1",
@@ -40,6 +43,7 @@
     "uuid": "^8.3.2",
     "uuidv4": "^6.2.6",
     "web-vitals": "^1.0.1",
+    "yarn": "^1.22.10",
     "yup": "^0.32.9"
   },
   "scripts": {

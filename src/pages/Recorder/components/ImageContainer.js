@@ -17,16 +17,16 @@ const ImageContainer = (props) =>{
         handleDownload(image, 'react-photobooth' + format)
     }
 
-    var imgs = images.length === 0 
-    ? <p>No Media</p> 
+    var imgs = images.length === 0
+    ? <p>Não há fotos</p>
     : images.map(x=>{
         return <Image src={x} key={x} setImage={setImage} handleRemoveImage={handleRemoveImage}/>
     })
 
     return <div className='imageContainer'>
     {imgs}
-    <ImageModal 
-            image={image} 
+    <ImageModal
+            image={image}
             setImage={setImage}
             onDelete={onDelete}
             onDownload={onDownload}

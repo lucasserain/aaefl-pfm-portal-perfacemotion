@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { SettingOutlined, 
+import { SettingOutlined,
     ToolOutlined,
     PictureOutlined,
     FieldTimeOutlined,
@@ -9,7 +9,7 @@ import { SettingOutlined,
 } from '@ant-design/icons';
 import {Drawer, Collapse, Card, Select, InputNumber, Tooltip} from 'antd'
 import {
-    // setFormat, setBurst, setBurstRate, setEnableFeed, 
+    // setFormat, setBurst, setBurstRate, setEnableFeed,
     updateSettings} from '../actions'
 import "antd/dist/antd.css";
 import '../App.css';
@@ -26,9 +26,9 @@ const Menu = (props) => {
     const dispatch = useDispatch();
 
     const {burst, burstRate, enableFeed, format} = settings;
-    
+
     const itemStyle={
-        padding: '10px 0 10px 0', 
+        padding: '10px 0 10px 0',
         overflowX: 'hidden'
     }
 
@@ -62,24 +62,24 @@ const Menu = (props) => {
             }
       >
       <Collapse accordion>
-        <Panel header={<p>Image Format <ToolOutlined /></p>} key="1" showArrow={false}> 
-        <p className='description'>What type of file do you want your images to be saved as?</p>
+        <Panel header={<p>Formato da imagem <ToolOutlined /></p>} key="1" showArrow={false}>
+        <p className='description'>Qual formato das imagens?</p>
         <Select onChange={(e)=>dispatch(updateSettings({format: e}))} defaultValue={format} style={{width: "100%"}}>
             {formats.map(form => {
                 return <Option value={form.val} key={form.val}>{form.name}</Option>
             })}
         </Select>
         </Panel>
-        <Panel header={<p>Burst Amount<span style={{position: 'relative'}}>
+        <Panel header={<p>Quantidade de imagem/frame<span style={{position: 'relative'}}>
                 <PictureOutlined className='burst' style={{marginLeft: 0, top: -4, left: -18, backgroundColor: '#fafafa'}}/>
                 <PictureOutlined className='burst' style={{marginLeft: 5, top: -4, left: -18,backgroundColor: '#fafafa'}}/>
                 <PictureOutlined className='burst' style={{marginLeft: 10, top: -4,left: -18, backgroundColor: '#fafafa'}}/>
             </span></p>} key="2" showArrow={false}>
-            <p className='description'>How many pictures do you want in one burst?</p>
+            <p className='description'>Quantos fotos por clique?</p>
             <InputNumber defaultValue={burst} onChange={(e)=>dispatch(updateSettings({burst: e}))} style={{width: '100%'}}/>
         </Panel>
-        <Panel header={<p>Burst Rate <FieldTimeOutlined /></p>} key="3" showArrow={false}>
-            <p className='description'>How many seconds between each picture?</p>
+        <Panel header={<p>Taxa de frames <FieldTimeOutlined /></p>} key="3" showArrow={false}>
+            <p className='description'>Segundos entre cada captura</p>
             <InputNumber defaultValue={burstRate} onChange={(e)=>dispatch(updateSettings({burstRate: e}))} style={{width: '100%'}}/>
         </Panel>
       </Collapse>
