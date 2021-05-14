@@ -9,6 +9,7 @@ function App() {
   return (
     <div className="App">
       <CaptureFunctional/>
+      <Menu></Menu>
     </div>
   );
 }

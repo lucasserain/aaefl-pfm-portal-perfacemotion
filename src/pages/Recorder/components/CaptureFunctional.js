@@ -4,6 +4,11 @@ import { useDispatch, useSelector } from "react-redux";
 import {updateSettings, addImage, removeImage, deleteAll, setStream} from '../actions';
 import ImageContainer from './ImageContainer';
 import {saveAs} from 'save-as';
+import axios from 'axios';
+import { runProducer } from '../../../adapter/kafka/producer';
+import callApiFrames from "../callApiFrames";
+import { putRequestWithBodyUploadFile } from '../teste';
+import { uuid } from 'uuidv4';
 import {
     VideoCameraOutlined,
     LoadingOutlined,
@@ -11,12 +16,19 @@ import {
 } from '@ant-design/icons';
 var JSZip = require("jszip");
 
+const merda = {
+  codAluno: '8462bb48-0d8a-46cf-88f4-648fc5b41180',
+  codAula: '2c026be0-f169-4d21-b34e-2e0d1f36dab3'
+};
+
+
 const CaptureFunctional = () =>{
 
     const settings = useSelector(state => state.settings);
     const stream = useSelector(state => state.stream);
     const images = useSelector(state => state.images);
     const videos = useSelector(state => state.videos);
+    const formData = new FormData();
     const dispatch = useDispatch();
 
     const {burst, burstRate, enableFeed, format} = settings;
@@ -43,7 +55,11 @@ const CaptureFunctional = () =>{
             canvas.getContext('2d').drawImage(video, 0, 0);
             var dataUrl = canvas.toDataURL('image/png');
             img.src = dataUrl
+
             dispatch(addImage(dataUrl))
+            let formData = new FormData();
+            sendFramesToApi(dataUrl);
+
         }
     }, [showScreenshot])
 
@@ -78,12 +94,13 @@ const CaptureFunctional = () =>{
 
     const onVideo1 = () =>{
         var video = document.querySelector('video')
-        video.captureStream = video.captureStream || video.mozCaptureStream;
+        console.log(video.captureStream());
         return new Promise(resolve => video.onplaying = resolve)
-        .then(()=>onVideo2(video.captureStream))
+        .then(()=>onVideo2(video.captureStream()))
         .then(chunks=>{
             let recordedBlob = new Blob(chunks, { type: "video/webm" });
             var video = URL.createObjectURL(recordedBlob)
+            console.log(video)
             setVideos(video, true)
         })
     };
@@ -92,6 +109,8 @@ const CaptureFunctional = () =>{
         setIsRecording(true)
         let recorder = new MediaRecorder(boi);
         let data = [];
+
+        console.log(boi);
 
         recorder.ondataavailable = event => data.push(event.data);
         recorder.start();
@@ -117,17 +136,18 @@ const CaptureFunctional = () =>{
     };
 
     const setVideos = (a, b) =>{
-        // var {videos} = this.state
-        // if (b){
-        //     videos.push(a)
-        // } else {
-        //     videos = videos.filter(x=>x !== a)
-        // }
-        // this.setState({videos})
+        var {videos} = this.state
+        if (b){
+             videos.push(a)
+         } else {
+             videos = videos.filter(x=>x !== a)
+         }
+         this.setState({videos})
     }
 
     const endVideo = () =>{
         stream.getTracks().forEach(track => track.stop());
+        console.log(stream)
         setIsRecording(false)
         hasGetUserMedia()
     }
@@ -150,13 +170,24 @@ const CaptureFunctional = () =>{
             handleDownload(images[0], 'react-photobooth-image' + format)
         }
     };
-
+    async function sendFramesToApi(url) {
+      await fetch(url).then(r => r.blob().then(rs => formData.append("file",rs,uuid())));
+      formData.append('codAluno','8462bb48-0d8a-46cf-88f4-648fc5b41180');
+      formData.append('codAula','2c026be0-f169-4d21-b34e-2e0d1f36dab3');
+      const requestOptions = putRequestWithBodyUploadFile(formData)
+      console.log(requestOptions)
+      return fetch(
+        `http://localhost:8080/frames`,
+        requestOptions
+      )
+    }
     const handleDownload = (data, name) => {
         var download = document.createElement('a');
         download.href = data
         download.download = name
         download.style.display = 'none';
         document.body.appendChild(download);
+        console.log(download);
         download.click();
         document.body.removeChild(download);
     };
