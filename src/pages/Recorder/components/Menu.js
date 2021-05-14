@@ -74,7 +74,7 @@ const Menu = (props) => {
                 <PictureOutlined className='burst' style={{marginLeft: 0, top: -4, left: -18, backgroundColor: '#fafafa'}}/>
                 <PictureOutlined className='burst' style={{marginLeft: 5, top: -4, left: -18,backgroundColor: '#fafafa'}}/>
                 <PictureOutlined className='burst' style={{marginLeft: 10, top: -4,left: -18, backgroundColor: '#fafafa'}}/>
-            </span></p>} key="2" showArrow={false}>
+            </span></p>} key="2" showArrow={false} >
             <p className='description'>Quantos fotos por clique?</p>
             <InputNumber defaultValue={burst} onChange={(e)=>dispatch(updateSettings({burst: e}))} style={{width: '100%'}}/>
         </Panel>

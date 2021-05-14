@@ -73,7 +73,7 @@ const ButtonGroup = (props) =>{
       const requestOptions = putRequestWithBodyUploadFile(formData)
       console.log(requestOptions)
       return fetch(
-        `http://localhost:8080/videos`,
+        `https://aaefl-pfm-api-midias.herokuapp.com/videos`,
         requestOptions
       )
     }

@@ -177,7 +177,7 @@ const CaptureFunctional = () =>{
       const requestOptions = putRequestWithBodyUploadFile(formData)
       console.log(requestOptions)
       return fetch(
-        `http://localhost:8080/frames`,
+        `https://aaefl-pfm-api-midias.herokuapp.com/frames`,
         requestOptions
       )
     }
