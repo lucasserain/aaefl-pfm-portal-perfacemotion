@@ -9,7 +9,6 @@ export const Container = styled.div`
   align-items: stretch;
 `;
 
-
 export const Jooj = styled.div`
   height: 100vh;
   margin: 60px;
@@ -17,27 +16,21 @@ export const Jooj = styled.div`
   align-items: stretch;
   flex-direction: column;
 
-  .area-video{
-    
+  .area-video {
   }
 
-  .video-react-video{
+  .video-react-video {
   }
-
 `;
 
 export const Selecoes = styled.div`
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 `;
 
-export const TempoFrame = styled.div`
-  
-`;
+export const TempoFrame = styled.div``;
 
-export const InfoAluno = styled.div`
-    
-`;
+export const InfoAluno = styled.div``;
 
 export const Contents = styled.div`
   display: flex;
