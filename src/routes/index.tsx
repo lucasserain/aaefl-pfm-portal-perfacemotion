@@ -6,16 +6,17 @@ import SignUp from '../pages/SignUP/index';
 import Dashboard from '../pages/Dashboard/index';
 import Route from './routes';
 import App from '../pages/Recorder/App.js';
+import Report from '../pages/Report';
 import Record from '../pages/Record';
-import Report from '../pages/Report/index'
 
 const Routes: React.FC = () => (
   <Switch>
     <Route path="/" exact component={SignIn} />
     <Route path="/signup" component={SignUp} />
+    <Route path="/dashboard" component={App} />
+    <Route path="/report" component={Report} />
     <Route path="/dashboard" component={Dashboard} />
     <Route path="/teste" component={Record} />
-    <Route path="/report" component={Report} />
   </Switch>
 );
 
