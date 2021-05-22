@@ -4,6 +4,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { FiLogIn, FiMail, FiLock, FiArrowLeft } from 'react-icons/fi';
 import ReactPlayer from 'react-player';
 import { uuid } from 'uuidv4';
+import Popup from 'reactjs-popup';
 import Button from '../../components/Button';
 import { putRequestWithBodyUploadFile } from '../Recorder/teste.js';
 import api from '../../services/api';
@@ -49,7 +50,7 @@ const Dashboard: React.FC = () => {
     alert(recordedChunks.length);
     if (recordedChunks.length) {
       const blob = new Blob(recordedChunks, {
-        type: 'video/webm',
+        type: 'video/mp4',
       });
       const url = URL.createObjectURL(blob);
       sendFramesToApi(url);
@@ -102,10 +103,10 @@ const Dashboard: React.FC = () => {
       </Header>
       <Container>
         <TitleHeader>
-          <h1>Analise e complexidade de algoritmo</h1>
-          <h1>Turma</h1>
+          <h1>Internet das Coisas</h1>
+          <h1>Turma: 8ºCiclo</h1>
           <p>
-            <span>Aula 5 - nmanaanan</span>
+            <span>Aula 5 - Introdução a IOT</span>
             <span>19/05/2021</span>
           </p>
         </TitleHeader>
@@ -118,22 +119,21 @@ const Dashboard: React.FC = () => {
               // console.log(e)
               // showImage()
             }}
-            url="https://www.youtube.com/watch?v=2bpAg2QI-HM"
+            url="https://youtu.be/hmQSYY01iWs"
             onPlay={handleStartCaptureClick}
             onPause={handleStopCaptureClick}
           />
           <p>
             <span>Anotações:</span>
             <span>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce
-              gravida nunc eu bibendum pulvinar. Etiam quis ante et diam
-              facilisis ultricies quis nec quam. Maecenas ipsum diam, posuere
-              eget egestas at, venenatis at odio. Nulla pharetra diam egestas
-              nulla pretium, tempor porta massa auctor. Aliquam sed vehicula
-              nisi, at auctor purus. Aliquam erat volutpat. Sed et varius nisl.
-              Proin sollicitudin dapibus metus, eu malesuada lorem faucibus in.
-              Pellentesque blandit scelerisque lorem viverra fringilla. Donec in
-              nisi quis tortor maximus vehicula sed ut felis.
+              A Internet das Coisas (Internet of Things, ou IoT) é um conceito
+              que dispõe que a maioria dos dispositivos que utilizamos
+              diariamente está conectada entre si e pela Internet. Há uma
+              revolução no momento que envolve a conexão de nossos mundos
+              físicos e digitais. O crescimento da Internet das Coisas e da
+              transformação digital está mudando drasticamente a maneira como os
+              consumidores interagem com seus carros, casas e eletrodomésticos,
+              mas também tem importantes implicações para a indústria.
             </span>
           </p>
         </VideoClassPlayer>
@@ -144,12 +144,12 @@ const Dashboard: React.FC = () => {
             screenshotFormat="image/jpeg"
             className="video-recorder"
           />
-          {recordedChunks.length > 0 && (
-            <Button className="btnSend" onClick={handleDownload}>
-              Enviar vídeo
-            </Button>
-          )}
         </VideoCaptureWeb>
+        {recordedChunks.length > 0 && (
+          <Button className="btnSend" onClick={handleDownload}>
+            Enviar vídeo
+          </Button>
+        )}
       </Container>
     </>
   );

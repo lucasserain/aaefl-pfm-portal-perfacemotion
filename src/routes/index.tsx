@@ -7,7 +7,6 @@ import Dashboard from '../pages/Dashboard/index';
 import Route from './routes';
 import App from '../pages/Recorder/App.js';
 import Record from '../pages/Record';
-import Report from '../pages/Report/index'
 
 const Routes: React.FC = () => (
   <Switch>
@@ -15,7 +14,6 @@ const Routes: React.FC = () => (
     <Route path="/signup" component={SignUp} />
     <Route path="/dashboard" component={Dashboard} />
     <Route path="/teste" component={Record} />
-    <Route path="/report" component={Report} />
   </Switch>
 );
 
