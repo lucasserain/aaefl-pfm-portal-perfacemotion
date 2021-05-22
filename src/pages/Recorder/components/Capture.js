@@ -4,10 +4,15 @@ import {connect} from 'react-redux';
 import {updateSettings, addImage, removeImage, deleteAll, setStream} from '../actions';
 import ImageContainer from './ImageContainer';
 import {saveAs} from 'save-as';
+import { runProducer } from '../../../adapter/kafka/producer';
 
 var JSZip = require("jszip");
 
+const jsonData = require('../../../adapter/kafka/app_json');
+
 class Capture extends Component {
+
+
 
     state = {
         showScreenshot: false,
@@ -75,18 +80,21 @@ class Capture extends Component {
 
     onVideo1 = () =>{
         var video = document.querySelector('video')
+        console.log(video);
         video.captureStream = video.captureStream || video.mozCaptureStream;
         return new Promise(resolve => video.onplaying = resolve)
         .then(()=>this.onVideo2(video.captureStream))
         .then(chunks=>{
             let recordedBlob = new Blob(chunks, { type: "video/webm" });
             var video = URL.createObjectURL(recordedBlob)
+            console.log(video)
             this.setVideos(video, true)
         })
     };
 
     onVideo2 = (boi) =>{
         this.setState({isRecording: true})
+        console.log(boi)
         let recorder = new MediaRecorder(boi);
         let data = [];
 
@@ -166,6 +174,8 @@ class Capture extends Component {
         this.props.deleteAll()
     }
 
+
+
     onBurst = () =>{
         var count = 0
 
@@ -205,7 +215,7 @@ class Capture extends Component {
                     ? <div className="dummyContainer" onClick={!enableFeed ? ()=> updateSettings({enableFeed: true}) : null}>
                         <div>
                             {enableFeed ? <VideoCameraOutlined/> : <VideoCameraAddOutlined style={{cursor: 'pointer'}} /> }
-                            {enableFeed ? <h3>Establishing Feed <LoadingOutlined/></h3> : <h3> Click To Start Feed </h3>}
+                            {enableFeed ? <h3>Carregando <LoadingOutlined/></h3> : <h3> Clique no canvas para iniciar o video </h3>}
                         </div>
                     </div>
                     : null

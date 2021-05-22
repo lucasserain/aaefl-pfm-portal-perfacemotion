@@ -3,36 +3,11 @@ import { shade } from 'polished';
 import signInBackgroundImg from '../../assets/sign-in-background.png';
 
 export const Container = styled.div`
-  height: 300vh;
-  margin: 60px;
-  display: flex;
-  align-items: stretch;
-`;
-
-export const Jooj = styled.div`
   height: 100vh;
-  margin: 60px;
   display: flex;
   align-items: stretch;
-  flex-direction: column;
-
-  .area-video {
-  }
-
-  .video-react-video {
-  }
 `;
-
-export const Selecoes = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-export const TempoFrame = styled.div``;
-
-export const InfoAluno = styled.div``;
-
-export const Contents = styled.div`
+export const Content = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;

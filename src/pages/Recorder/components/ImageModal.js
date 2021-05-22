@@ -15,7 +15,7 @@ const ImageModal = (props) =>{
             closeIcon={<CloseCircleFilled/>}
             footer={
             <div style={{display: 'flex', width: 200, margin: 'auto', justifyContent: 'center'}}>
-            <Popconfirm title="Are you sure you want to delete this image?"
+            <Popconfirm title="Deletar imagem?"
                             onConfirm={onDelete}
                             okText="Delete Image"
                             overlayStyle={{zIndex: 1001}}
