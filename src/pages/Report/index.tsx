@@ -40,12 +40,8 @@ import {
   TempoFrame,
   InfoAluno,
 } from './styles';
-import api from '../../services/api';
+
 import './index.css';
-import edu from '../../styles/edu.jpg';
-import serain from '../../styles/serain.png';
-import serain1 from '../../styles/8.png';
-import rock from '../../styles/rock.jpg';
 
 const { Header, Footer, Sider, Content } = Layout;
 
