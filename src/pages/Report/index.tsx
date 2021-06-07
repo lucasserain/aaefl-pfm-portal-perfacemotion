@@ -424,15 +424,15 @@ const Report = () => {
         <Layout>
           <Content>
             <Jooj className="jooj">
-              <Descriptions title="Informações do Aluno">
+              <Descriptions title="Informações do Aluno/Turma">
                 <Descriptions.Item label="Nome">
                   {aluno[0].nome}
                 </Descriptions.Item>
                 <Descriptions.Item label="E-mail">
                   {aluno[0].email}
                 </Descriptions.Item>
-                <Descriptions.Item label="Cidade">
-                  São Bernardo do Campo, São Paulo
+                <Descriptions.Item label="Data">
+                  18 de Abril de 2021
                 </Descriptions.Item>
                 <Descriptions.Item label="Aula">
                   Internet das Coisas
