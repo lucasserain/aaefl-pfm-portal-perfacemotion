@@ -161,40 +161,61 @@ const Report = () => {
     },
   ]);
 
+  const [aula, setAula] = useState([
+    {
+      codAula: '',
+      codDisciplina: '',
+      inicioAula: '',
+      finalAula: '',
+      duracaoAula: '',
+      dataCriacao: '',
+      dataAlteracao: '',
+      urlVideo: '',
+      nomeAula: '',
+      descricao: '',
+    },
+  ]);
+
+  const countEmocoes = [
+    {
+      countEmocao: 0,
+      string: 'Alegria',
+      porcentagem: '15%',
+    },
+    {
+      countEmocao: 0,
+      string: 'Tristeza',
+      porcentagem: '1%',
+    },
+    {
+      countEmocao: 0,
+      string: 'Surpresa',
+      porcentagem: '9%',
+    },
+    {
+      countEmocao: 0,
+      string: 'Neutro',
+      porcentagem: '70%',
+    },
+    {
+      countEmocao: 0,
+      string: 'Raiva',
+      porcentagem: '2%',
+    },
+    {
+      countEmocao: 0,
+      string: 'Nojo',
+      porcentagem: '1%',
+    },
+    {
+      countEmocao: 0,
+      string: 'Medo',
+      porcentagem: '2%',
+    },
+  ];
   const player = useRef<ReactPlayer>(null);
 
   const getEmocaoPredominante = (resultado: any[]) => {
-    const countEmocoes = [
-      {
-        countEmocao: 0,
-        string: 'Alegria',
-      },
-      {
-        countEmocao: 0,
-        string: 'Tristeza',
-      },
-      {
-        countEmocao: 0,
-        string: 'Surpresa',
-      },
-      {
-        countEmocao: 0,
-        string: 'Neutro',
-      },
-      {
-        countEmocao: 0,
-        string: 'Raiva',
-      },
-      {
-        countEmocao: 0,
-        string: 'Nojo',
-      },
-      {
-        countEmocao: 0,
-        string: 'Medo',
-      },
-    ];
-
     resultado.forEach((item) => {
       if (item.emocao === 'Alegria') {
         countEmocoes[0].countEmocao += 1;
@@ -231,8 +252,31 @@ const Report = () => {
     });
 
     setEmocao(predominante);
+
+    countEmocoes[0].porcentagem = ((countEmocoes[0].countEmocao / total) * 100)
+      .toString()
+      .concat('%');
+    countEmocoes[1].porcentagem = ((countEmocoes[1].countEmocao / total) * 100)
+      .toString()
+      .concat('%');
+    countEmocoes[2].porcentagem = ((countEmocoes[2].countEmocao / total) * 100)
+      .toString()
+      .concat('%');
+    countEmocoes[3].porcentagem = ((countEmocoes[3].countEmocao / total) * 100)
+      .toString()
+      .concat('%');
+    countEmocoes[4].porcentagem = ((countEmocoes[4].countEmocao / total) * 100)
+      .toString()
+      .concat('%');
+    countEmocoes[5].porcentagem = ((countEmocoes[5].countEmocao / total) * 100)
+      .toString()
+      .concat('%');
+    countEmocoes[6].porcentagem = ((countEmocoes[6].countEmocao / total) * 100)
+      .toString()
+      .concat('%');
+
     console.log('predominante: ', emocao);
-    console.log('Vezes Emoção: ', total);
+    console.log('Vezes Total: ', total);
 
     return predominante;
   };
@@ -244,7 +288,7 @@ const Report = () => {
     if (resultado === undefined) {
       return null;
     }
-    const countEmocoes = [
+    const countEmocoes2 = [
       {
         countEmocao: 0,
         string: 'Alegria',
@@ -315,6 +359,26 @@ const Report = () => {
     return predominante;
   };
 
+  const getAulaInfo = async (idDisciplina: any) => {
+    await fetch(
+      `https://aaefl-pfm-api-midias.herokuapp.com/disciplina/${idDisciplina}/aulas`, // eae67ff6-0da1-4bb8-a0e4-672dcdfc34cd
+    )
+      .then((results) => results.json())
+      .then((results) => {
+        if (results.length > 0) {
+          // talvez usar o codigo do kejo (discord, index.js) para ordernar o tempo
+          setAula(results);
+          console.log('aula: ', results);
+        } else {
+          setNomeAluno('Emoção não encontrada!');
+        }
+      })
+      .catch((temErro) => {
+        console.log('erro: ', temErro);
+        setNomeAluno('Erro na api');
+      });
+  };
+
   const getEmotionInfo = async (
     idDisciplina: any,
     idAula: any,
@@ -325,8 +389,11 @@ const Report = () => {
     )
       .then((results) => results.json())
       .then((results) => {
+        console.log(
+          `https://aaefl-pfm-api-midias.herokuapp.com/relatorios/${idDisciplina}?idAula=${idAula}&idAluno=${idAluno}`,
+        );
         setNomeAluno('Carregando...');
-        if (results.length > 0) {
+        if (results.length >= 0) {
           // talvez usar o codigo do kejo (discord, index.js) para ordernar o tempo
           setResult(results);
           getEmocaoPredominante(results);
@@ -373,6 +440,7 @@ const Report = () => {
     // getEmocaoPredominante(result);
     // getEmocaoPredominanteIntervalo(result, 2);
     // setEmocao(); // getStudentInfo
+    getAulaInfo('eae67ff6-0da1-4bb8-a0e4-672dcdfc34cd');
   }, [result]);
   // quando colocar um estado no [], ele chama dnv quando ele mudar
 
@@ -478,8 +546,28 @@ const Report = () => {
                   className="area-video"
                 />
                 <div className="emocaoPredominante">
-                  <h3>Emoção Predominante:</h3>
-                  <h4>{emocao}</h4>
+                  <h3>Emoção Predominante: {emocao}</h3>
+                  <h4>
+                    {countEmocoes[0].string} - {countEmocoes[0].porcentagem}
+                  </h4>
+                  <h4>
+                    {countEmocoes[6].string} - {countEmocoes[6].porcentagem}
+                  </h4>
+                  <h4>
+                    {countEmocoes[3].string} - {countEmocoes[3].porcentagem}
+                  </h4>
+                  <h4>
+                    {countEmocoes[5].string} - {countEmocoes[5].porcentagem}
+                  </h4>
+                  <h4>
+                    {countEmocoes[4].string} - {countEmocoes[4].porcentagem}
+                  </h4>
+                  <h4>
+                    {countEmocoes[2].string} - {countEmocoes[2].porcentagem}
+                  </h4>
+                  <h4>
+                    {countEmocoes[1].string} - {countEmocoes[1].porcentagem}
+                  </h4>
                 </div>
               </div>
               <h4 className="infoSlider">
