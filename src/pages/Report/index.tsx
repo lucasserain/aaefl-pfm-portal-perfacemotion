@@ -1,19 +1,7 @@
-import React, {
-  useRef,
-  useCallback,
-  useState,
-  Component,
-  lazy,
-  useEffect,
-  Children,
-} from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import ReactPlayer from 'react-player';
 import Slider from 'react-slick';
 import {
-  Statistic,
-  Card,
-  Row,
-  Col,
   Layout,
   Descriptions,
   Radio,
@@ -42,6 +30,8 @@ import {
 } from './styles';
 
 import './index.css';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 const { Header, Footer, Sider, Content } = Layout;
 
@@ -126,126 +116,6 @@ const menuAula = (
   </Menu>
 );
 
-const result2 = [
-  {
-    cod_frame: '004bdc55',
-    dt_alte: '2021-08-05 19:28:42',
-    dt_cria: '0:15',
-    name: 'Eduardo',
-    ra: '222170274',
-    url_frame: 'edu',
-    emocao: 'Alegria',
-  },
-  {
-    cod_frame: '004bdc55',
-    dt_alte: '2021-08-05 19:28:42',
-    dt_cria: '0:20',
-    name: 'Serain',
-    ra: '222170274',
-    url_frame:
-      'https://lucasserain.s3.us-east-2.amazonaws.com/62a49d64-9c23-4a66-9b33-811ddc5c557e',
-    emocao: 'Medo',
-  },
-  {
-    cod_frame: '004bdc55',
-    dt_alte: '2021-08-05 19:28:42',
-    dt_cria: '0:25',
-    ra: '222170274',
-    name: 'Serain 1',
-    url_frame: 'serain1',
-    emocao: 'Tristeza',
-  },
-  {
-    cod_frame: '004bdc55',
-    dt_alte: '2021-08-05 19:28:42',
-    dt_cria: '0:15',
-    name: 'Eduardo',
-    ra: '222170274',
-    url_frame: 'rock',
-    emocao: 'Nojo',
-  },
-  {
-    cod_frame: '004bdc55',
-    dt_alte: '2021-08-05 19:28:42',
-    dt_cria: '0:20',
-    name: 'Serain',
-    ra: '222170274',
-    url_frame: 'serain',
-    emocao: 'Medo',
-  },
-  {
-    cod_frame: '004bdc55',
-    dt_alte: '2021-08-05 19:28:42',
-    dt_cria: '0:25',
-    ra: '222170274',
-    name: 'Serain 1',
-    url_frame: 'serain1',
-    emocao: 'Tristeza',
-  },
-];
-
-const lool = [
-  {
-    student: {
-      name: 'Serain',
-    },
-    frame: [
-      {
-        cod_frame: '004bdc55',
-        dt_alte: '2021-08-05 19:28:42',
-        dt_cria: '0:20',
-        ra: '222170274',
-        url_frame:
-          'https://lucasserain.s3.us-east-2.amazonaws.com/62a49d64-9c23-4a66-9b33-811ddc5c557e',
-        emocao: 'Medo',
-      },
-      {
-        cod_frame: '004bdc55',
-        dt_alte: '2021-08-05 19:28:42',
-        dt_cria: '0:25',
-        ra: '222170274',
-        url_frame:
-          'https://lucasserain.s3.us-east-2.amazonaws.com/62a49d64-9c23-4a66-9b33-811ddc5c557e',
-        emocao: 'Medo',
-      },
-    ],
-  },
-  {
-    student: {
-      name: 'Cleita',
-    },
-    frame: [
-      {
-        cod_frame: '004bdc55',
-        dt_alte: '2021-08-05 19:28:42',
-        dt_cria: '0:20',
-        ra: '222170274',
-        url_frame:
-          'https://static.maislaser.com.br/media/catalog/product/cache/2/thumbnail/900x900/9df78eab33525d08d6e5fb8d27136e95/r/o/rosto_1_2.jpg',
-        emocao: 'Medo',
-      },
-      {
-        cod_frame: '004bdc55',
-        dt_alte: '2021-08-05 19:28:42',
-        dt_cria: '0:20',
-        ra: '222170274',
-        url_frame:
-          'https://julianafonte.com.br/wp-content/uploads/2018/02/dermato-estetica-macas-do-rosto.jpg',
-        emocao: 'Tristeza',
-      },
-      {
-        cod_frame: '004bdc55',
-        dt_alte: '2021-08-05 19:28:42',
-        dt_cria: '0:20',
-        ra: '222170274',
-        url_frame:
-          'https://i.pinimg.com/originals/8b/37/aa/8b37aa8a10687703735ea9389085adc2.jpg',
-        emocao: 'Medo',
-      },
-    ],
-  },
-];
-
 const resultDefault = [
   {
     cod_frame: '',
@@ -257,82 +127,6 @@ const resultDefault = [
     emocao: '',
   },
 ];
-
-const getEmocaoPredominante2 = (resultado: any[]) => {
-  console.log('hm: ', resultado[0].emocao);
-
-  const countEmocoes = [
-    {
-      countEmocao: 0,
-      string: 'Alegria',
-    },
-    {
-      countEmocao: 0,
-      string: 'Tristeza',
-    },
-    {
-      countEmocao: 0,
-      string: 'Surpresa',
-    },
-    {
-      countEmocao: 0,
-      string: 'Neutro',
-    },
-    {
-      countEmocao: 0,
-      string: 'Raiva',
-    },
-    {
-      countEmocao: 0,
-      string: 'Nojo',
-    },
-    {
-      countEmocao: 0,
-      string: 'Medo',
-    },
-  ];
-
-  resultado.forEach((item) => {
-    if (item.emocao === 'Alegria') {
-      countEmocoes[0].countEmocao += 1;
-    } else if (item.emocao === 'Tristeza') {
-      countEmocoes[1].countEmocao += 1;
-    } else if (item.emocao === 'Surpresa') {
-      countEmocoes[2].countEmocao += 1;
-    } else if (item.emocao === 'Neutro') {
-      countEmocoes[3].countEmocao += 1;
-    } else if (item.emocao === 'Raiva') {
-      countEmocoes[4].countEmocao += 1;
-    } else if (item.emocao === 'Nojo') {
-      countEmocoes[5].countEmocao += 1;
-    } else if (item.emocao === 'Medo') {
-      countEmocoes[6].countEmocao += 1;
-    }
-  });
-
-  const total =
-    countEmocoes[0].countEmocao +
-    countEmocoes[1].countEmocao +
-    countEmocoes[2].countEmocao +
-    countEmocoes[3].countEmocao +
-    countEmocoes[4].countEmocao +
-    countEmocoes[5].countEmocao +
-    countEmocoes[6].countEmocao;
-  let maior = 0;
-  let predominante = '';
-  countEmocoes.forEach((emocao) => {
-    if (emocao.countEmocao > maior) {
-      maior = emocao.countEmocao;
-      predominante = emocao.string;
-    }
-  });
-
-  console.log('predominante: ', predominante);
-
-  console.log('Vezes Emoção: ', total);
-
-  return predominante;
-};
 
 const Report = () => {
   const [value, setValue] = useState(1);
@@ -346,21 +140,30 @@ const Report = () => {
 
   const [result, setResult] = useState([
     {
-      cod_frame: '',
-      dt_alte: '',
-      dt_cria: '',
-      name: '',
-      ra: '',
-      url_frame: '',
+      dataAlteracao: '',
+      dataCriacao: '',
+      tempoFrame: '',
       emocao: '',
+      idFrame: '',
+      urlFrame: '',
+    },
+  ]);
+
+  const [aluno, setAluno] = useState([
+    {
+      codUsuario: '',
+      dataAlteracao: '',
+      dataCriacao: '',
+      email: '',
+      nome: '',
+      tipoUsuario: '',
+      urlAvatar: '',
     },
   ]);
 
   const player = useRef<ReactPlayer>(null);
 
   const getEmocaoPredominante = (resultado: any[]) => {
-    console.log('hm: ', resultado[0]);
-
     const countEmocoes = [
       {
         countEmocao: 0,
@@ -434,22 +237,126 @@ const Report = () => {
     return predominante;
   };
 
-  useEffect(() => {
-    // getStudentInfo("jooj");
-    getEmocaoPredominante(result);
-    // setEmocao(); // getStudentInfo
-  }, [result]);
-  // quando colocar um estado no [], ele chama dnv quando ele mudar
+  const getEmocaoPredominanteIntervalo = (
+    resultado: any[],
+    periodoIntervalo: number,
+  ) => {
+    if (resultado === undefined) {
+      return null;
+    }
+    const countEmocoes = [
+      {
+        countEmocao: 0,
+        string: 'Alegria',
+      },
+      {
+        countEmocao: 0,
+        string: 'Tristeza',
+      },
+      {
+        countEmocao: 0,
+        string: 'Surpresa',
+      },
+      {
+        countEmocao: 0,
+        string: 'Neutro',
+      },
+      {
+        countEmocao: 0,
+        string: 'Raiva',
+      },
+      {
+        countEmocao: 0,
+        string: 'Nojo',
+      },
+      {
+        countEmocao: 0,
+        string: 'Medo',
+      },
+    ];
 
-  const getStudentInfo = async (studentStr: any) => {
+    resultado.forEach((item) => {
+      if (item.emocao === 'Alegria') {
+        countEmocoes[0].countEmocao += 1;
+      } else if (item.emocao === 'Tristeza') {
+        countEmocoes[1].countEmocao += 1;
+      } else if (item.emocao === 'Surpresa') {
+        countEmocoes[2].countEmocao += 1;
+      } else if (item.emocao === 'Neutro') {
+        countEmocoes[3].countEmocao += 1;
+      } else if (item.emocao === 'Raiva') {
+        countEmocoes[4].countEmocao += 1;
+      } else if (item.emocao === 'Nojo') {
+        countEmocoes[5].countEmocao += 1;
+      } else if (item.emocao === 'Medo') {
+        countEmocoes[6].countEmocao += 1;
+      }
+    });
+    console.log('tristeza: ', countEmocoes[1].countEmocao);
+    const total =
+      countEmocoes[0].countEmocao +
+      countEmocoes[1].countEmocao +
+      countEmocoes[2].countEmocao +
+      countEmocoes[3].countEmocao +
+      countEmocoes[4].countEmocao +
+      countEmocoes[5].countEmocao +
+      countEmocoes[6].countEmocao;
+    let maior = 0;
+    let predominante = '';
+    countEmocoes.forEach((itemEmocao) => {
+      if (itemEmocao.countEmocao > maior) {
+        maior = itemEmocao.countEmocao;
+        predominante = itemEmocao.string;
+      }
+    });
+
+    console.log('predominanteIntervalo: ', predominante);
+
+    return predominante;
+  };
+
+  const getEmotionInfo = async (
+    idDisciplina: any,
+    idAula: any,
+    idAluno: any,
+  ) => {
     await fetch(
-      `https://6099bb140f5a13001721992c.mockapi.io/api/tccFake/jooj?search=${studentStr}`,
-    ) // nome=${studentStr}
+      `https://aaefl-pfm-api-midias.herokuapp.com/relatorios/${idDisciplina}?idAula=${idAula}&idAluno=${idAluno}`,
+    )
       .then((results) => results.json())
       .then((results) => {
+        setNomeAluno('Carregando...');
         if (results.length > 0) {
+          // talvez usar o codigo do kejo (discord, index.js) para ordernar o tempo
           setResult(results);
+          getEmocaoPredominante(results);
           console.log('jooj: ', results);
+        } else {
+          setNomeAluno('Emoção não encontrada!');
+        }
+      })
+      .catch((temErro) => {
+        console.log('erro: ', temErro);
+        setNomeAluno('Erro na api');
+      });
+
+    return result;
+  };
+
+  const getStudentInfo = async (nome: any) => {
+    await fetch(
+      `https://aaefl-pfm-api-midias.herokuapp.com/usuarios/?nome=${nome}`,
+    )
+      .then((estudante) => estudante.json())
+      .then((estudante) => {
+        if (estudante.length > 0) {
+          setAluno(estudante);
+          console.log('Aluno: ', estudante);
+          getEmotionInfo(
+            '8462bb48-0d8a-46cf-88f4-648fc5b41180',
+            '2c026be0-f169-4d21-b34e-2e0d1f36dab3',
+            aluno[0].codUsuario,
+          );
         } else {
           setNomeAluno('Aluno não encontrado!');
         }
@@ -462,41 +369,12 @@ const Report = () => {
     return result;
   };
 
-  // const showImage = () => {
-  //   result.forEach(frame => {
-  //     console.log(player.current?.getCurrentTime().toFixed(0), "=", parseFloat(frame.dt_cria).toFixed(0))
-  //     if (player.current?.getCurrentTime().toFixed(0) === parseFloat(frame.dt_cria).toFixed(0)) {
-
-  //       console.log(frame.emocao)
-  //       console.log("ACHOU!")
-  //       return (
-  //         <>
-  //           <img src={edu} alt="emocao do aluno" className='imagem' />
-  //           <h2>{result[0].emocao}</h2>
-  //         </>
-  //       )
-  //     }
-  //     return (
-  //       <>
-  //       </>
-  //     )
-  //   })
-  // }
-
-  const onCurrentTimeChange = (e: any) => {
-    result.forEach((frame) => {
-      console.log(
-        e.playedSeconds.toFixed(0),
-        '=',
-        parseFloat(frame.dt_cria).toFixed(0),
-      );
-      if (e.playedSeconds.toFixed(0) === parseFloat(frame.dt_cria).toFixed(0)) {
-        console.log(frame.emocao);
-        console.log('ACHOU!');
-        // showImage();
-      }
-    });
-  };
+  useEffect(() => {
+    // getEmocaoPredominante(result);
+    // getEmocaoPredominanteIntervalo(result, 2);
+    // setEmocao(); // getStudentInfo
+  }, [result]);
+  // quando colocar um estado no [], ele chama dnv quando ele mudar
 
   const onIntervaloChange = (e: any) => {
     console.log('radio checked', e.target.value);
@@ -524,7 +402,7 @@ const Report = () => {
   };
 
   const settings = {
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 500,
     slidesToShow: 3,
@@ -548,14 +426,20 @@ const Report = () => {
             <Jooj className="jooj">
               <Descriptions title="Informações do Aluno">
                 <Descriptions.Item label="Nome">
-                  {result[0].name}
+                  {aluno[0].nome}
                 </Descriptions.Item>
-                <Descriptions.Item label="RA">{result[0].ra}</Descriptions.Item>
+                <Descriptions.Item label="E-mail">
+                  {aluno[0].email}
+                </Descriptions.Item>
                 <Descriptions.Item label="Cidade">
                   São Bernardo do Campo, São Paulo
                 </Descriptions.Item>
-                <Descriptions.Item label="Aula">Feijoada</Descriptions.Item>
-                <Descriptions.Item label="Professor">Bisteca</Descriptions.Item>
+                <Descriptions.Item label="Aula">
+                  Internet das Coisas
+                </Descriptions.Item>
+                <Descriptions.Item label="Professor">
+                  Guilherme Wachs
+                </Descriptions.Item>
                 <Descriptions.Item label="Semestre">8°</Descriptions.Item>
               </Descriptions>
               <Selecoes>
@@ -570,26 +454,10 @@ const Report = () => {
                   </Radio.Group>
                 </TempoFrame>
                 <InfoAluno>
-                  <Dropdown overlay={menuSemestre} trigger={['click']}>
-                    <Button
-                      className="ant-dropdown-link"
-                      onClick={(e) => e.preventDefault()}
-                    >
-                      Semestre <DownOutlined />
-                    </Button>
-                  </Dropdown>
-                  <Dropdown overlay={menuMateria} trigger={['click']}>
-                    <Button
-                      className="ant-dropdown-link"
-                      onClick={(e) => e.preventDefault()}
-                    >
-                      Matéria <DownOutlined />
-                    </Button>
-                  </Dropdown>
                   <Dropdown overlay={menuAula} trigger={['click']}>
                     <Button
                       className="ant-dropdown-link"
-                      onClick={(e) => e.preventDefault()}
+                      onClick={(e) => e.preventDefault()} /* setAula() */
                     >
                       Aula <DownOutlined />
                     </Button>
@@ -606,7 +474,7 @@ const Report = () => {
                     // showImage()
                   }}
                   controls={showControl}
-                  url="https://www.youtube.com/watch?v=cavs2Ju8u6U"
+                  url="https://youtu.be/hmQSYY01iWs"
                   className="area-video"
                 />
                 <div className="emocaoPredominante">
@@ -622,37 +490,26 @@ const Report = () => {
               </h4>
 
               <Slider {...settings} className="container">
-                {/* {result.forEach(() => {
-                  setCurr(curr + intervalo);
-                  if(curr <= result.length - 1){
-                    // setResult(result);
-                    return (
-                      <>
-                        <img src={result[curr].url_frame} alt="emocao do aluno" className='imagem' />
-                        <h2>{result[curr].emocao} - {result[curr].dt_cria}</h2>
-                      </>
-                    )
-                  }
-                  return (<> </>)
-                })} */}
-
                 {result.map((frame, i) => {
                   // INTERVALO DE TEMPO PARA EXIBIR A REACAO
-                  console.log(i * intervalo);
+                  // console.log(i * intervalo);
                   const index = i * intervalo;
-                  if (index === 0) console.log(result[i * intervalo]);
+                  if (result[i * intervalo] === null) {
+                    console.log('null', result[i * intervalo]);
+                  }
 
                   if (result[i * intervalo] !== undefined) {
+                    // console.log('intervalo: ', index, result[i * intervalo]);
                     return (
                       <>
                         <img
-                          src={result[i * intervalo].url_frame}
+                          src={result[i * intervalo].urlFrame}
                           alt="emocao do aluno"
                           className="imagem"
                         />
                         <h2>
                           {result[i * intervalo].emocao} -{' '}
-                          {result[i * intervalo].dt_cria}
+                          {result[i * intervalo].tempoFrame}
                         </h2>
                       </>
                     );
@@ -670,6 +527,26 @@ const Report = () => {
 
 export default Report;
 
+/*
+<Dropdown overlay={menuSemestre} trigger={['click']}>
+                    <Button
+                      className="ant-dropdown-link"
+                      onClick={(e) => e.preventDefault()}
+                    >
+                      Semestre <DownOutlined />
+                    </Button>
+                  </Dropdown>
+*/
+/*
+<Dropdown overlay={menuMateria} trigger={['click']}>
+                    <Button
+                      className="ant-dropdown-link"
+                      onClick={(e) => e.preventDefault()}
+                    >
+                      Matéria <DownOutlined />
+                    </Button>
+                  </Dropdown>
+                  */
 // <h3>{getEmocaoPredominante(result)}</h3>
 
 // <img src="C:\Users\andre\Desktop\TCC\edu.jpg" alt="emocao do aluno" className='imagem'/>
