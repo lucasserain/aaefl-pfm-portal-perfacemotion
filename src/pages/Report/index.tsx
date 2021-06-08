@@ -35,6 +35,96 @@ import 'slick-carousel/slick/slick-theme.css';
 
 const { Header, Footer, Sider, Content } = Layout;
 
+const aulas = [
+  {
+    codAula: '',
+    codDisciplina: '',
+    inicioAula: '',
+    finalAula: '',
+    duracaoAula: '',
+    dataCriacao: '',
+    dataAlteracao: '',
+    urlVideo: '',
+    nomeAula: 'Feijuca',
+    descricao: '',
+  },
+];
+
+const teste = () => {
+  return (
+    <Menu>
+      {aulas.map((aula, i) => {
+        if (aulas[i] !== null) {
+          return (
+            <Menu.Item key="0">
+              <a href="0">{aulas[i].nomeAula}</a>
+            </Menu.Item>
+          );
+        }
+        return (
+          <Menu.Item key="0">
+            <a href="0">Sem aulas</a>
+          </Menu.Item>
+        );
+      })}
+    </Menu>
+  );
+};
+
+const menuAula = aulas.map((frame, i) => {
+  if (aulas[i] === null) {
+    console.log('null', aulas[i]);
+    return (
+      <Menu>
+        <Menu.Item key="0">
+          <a href="0">Sem aulas</a>
+        </Menu.Item>
+      </Menu>
+    );
+  }
+
+  if (aulas[i] !== undefined) {
+    // console.log('intervalo: ', index, result[i * intervalo]);
+    return (
+      <Menu>
+        <Menu.Item key="0">
+          <a href="0">{aulas[i].nomeAula}</a>
+        </Menu.Item>
+      </Menu>
+    );
+  }
+  return (
+    <Menu>
+      <Menu.Item key="0">
+        <a href="0">Sem aulas</a>
+      </Menu.Item>
+    </Menu>
+  );
+});
+/** 
+  <Menu>
+    <Menu.Item key="0">
+      <a href="1">{aula[0].nomeAula}</a>
+    </Menu.Item>
+    <Menu.Item key="1">
+      <a href="2">{aula[1].nomeAula}</a>
+    </Menu.Item>
+    <Menu.Item key="3">
+      <a href="3">Cortando o bacon e linguiça - 05/03/2021</a>
+    </Menu.Item>
+    <Menu.Item key="4">
+      <a href="4">Colocando no fogo - 23/03/2021</a>
+    </Menu.Item>
+    <Menu.Item key="5">
+      <a href="5">Adicionando o tempero - 07/04/2021</a>
+    </Menu.Item>
+    <Menu.Item key="6">
+      <a href="6">Servindo - 25/04/2021</a>
+    </Menu.Item>
+    <Menu.Divider />
+    <Menu.Item key="7">Todas as aulas</Menu.Item>
+  </Menu> */
+
 const menuSemestre = (
   <Menu>
     <Menu.Item key="0">
@@ -91,31 +181,6 @@ const menuMateria = (
   </Menu>
 );
 
-const menuAula = (
-  <Menu>
-    <Menu.Item key="0">
-      <a href="1">Introducao - 02/02/2021</a>
-    </Menu.Item>
-    <Menu.Item key="1">
-      <a href="2">Separando o feijão preto - 14/02/2021</a>
-    </Menu.Item>
-    <Menu.Item key="3">
-      <a href="3">Cortando o bacon e linguiça - 05/03/2021</a>
-    </Menu.Item>
-    <Menu.Item key="4">
-      <a href="4">Colocando no fogo - 23/03/2021</a>
-    </Menu.Item>
-    <Menu.Item key="5">
-      <a href="5">Adicionando o tempero - 07/04/2021</a>
-    </Menu.Item>
-    <Menu.Item key="6">
-      <a href="6">Servindo - 25/04/2021</a>
-    </Menu.Item>
-    <Menu.Divider />
-    <Menu.Item key="7">Todas as aulas</Menu.Item>
-  </Menu>
-);
-
 const resultDefault = [
   {
     cod_frame: '',
@@ -138,6 +203,21 @@ const Report = () => {
 
   const [curr, setCurr] = useState(0);
 
+  const [aula, setAula] = useState([
+    {
+      codAula: '',
+      codDisciplina: '',
+      inicioAula: '',
+      finalAula: '',
+      duracaoAula: '',
+      dataCriacao: '',
+      dataAlteracao: '',
+      urlVideo: '',
+      nomeAula: '',
+      descricao: '',
+    },
+  ]);
+
   const [result, setResult] = useState([
     {
       dataAlteracao: '',
@@ -158,21 +238,6 @@ const Report = () => {
       nome: '',
       tipoUsuario: '',
       urlAvatar: '',
-    },
-  ]);
-
-  const [aula, setAula] = useState([
-    {
-      codAula: '',
-      codDisciplina: '',
-      inicioAula: '',
-      finalAula: '',
-      duracaoAula: '',
-      dataCriacao: '',
-      dataAlteracao: '',
-      urlVideo: '',
-      nomeAula: '',
-      descricao: '',
     },
   ]);
 
@@ -366,7 +431,6 @@ const Report = () => {
       .then((results) => results.json())
       .then((results) => {
         if (results.length > 0) {
-          // talvez usar o codigo do kejo (discord, index.js) para ordernar o tempo
           setAula(results);
           console.log('aula: ', results);
         } else {
@@ -522,7 +586,7 @@ const Report = () => {
                   </Radio.Group>
                 </TempoFrame>
                 <InfoAluno>
-                  <Dropdown overlay={menuAula} trigger={['click']}>
+                  <Dropdown overlay={teste} trigger={['click']}>
                     <Button
                       className="ant-dropdown-link"
                       onClick={(e) => e.preventDefault()} /* setAula() */
