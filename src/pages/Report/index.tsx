@@ -241,43 +241,43 @@ const Report = () => {
     },
   ]);
 
-  const countEmocoes = [
+  const [countEmocoes, setCountEmocoes] = useState([
     {
       countEmocao: 0,
       string: 'Alegria',
-      porcentagem: '15%',
+      porcentagem: '',
     },
     {
       countEmocao: 0,
       string: 'Tristeza',
-      porcentagem: '1%',
+      porcentagem: '',
     },
     {
       countEmocao: 0,
       string: 'Surpresa',
-      porcentagem: '9%',
+      porcentagem: '',
     },
     {
       countEmocao: 0,
       string: 'Neutro',
-      porcentagem: '70%',
+      porcentagem: '',
     },
     {
       countEmocao: 0,
       string: 'Raiva',
-      porcentagem: '2%',
+      porcentagem: '',
     },
     {
       countEmocao: 0,
       string: 'Nojo',
-      porcentagem: '1%',
+      porcentagem: '',
     },
     {
       countEmocao: 0,
       string: 'Medo',
-      porcentagem: '2%',
+      porcentagem: '',
     },
-  ];
+  ]);
   const player = useRef<ReactPlayer>(null);
 
   const getEmocaoPredominante = (resultado: any[]) => {
@@ -317,28 +317,81 @@ const Report = () => {
     });
 
     setEmocao(predominante);
-
-    countEmocoes[0].porcentagem = ((countEmocoes[0].countEmocao / total) * 100)
-      .toString()
-      .concat('%');
-    countEmocoes[1].porcentagem = ((countEmocoes[1].countEmocao / total) * 100)
-      .toString()
-      .concat('%');
-    countEmocoes[2].porcentagem = ((countEmocoes[2].countEmocao / total) * 100)
-      .toString()
-      .concat('%');
-    countEmocoes[3].porcentagem = ((countEmocoes[3].countEmocao / total) * 100)
-      .toString()
-      .concat('%');
-    countEmocoes[4].porcentagem = ((countEmocoes[4].countEmocao / total) * 100)
-      .toString()
-      .concat('%');
-    countEmocoes[5].porcentagem = ((countEmocoes[5].countEmocao / total) * 100)
-      .toString()
-      .concat('%');
-    countEmocoes[6].porcentagem = ((countEmocoes[6].countEmocao / total) * 100)
-      .toString()
-      .concat('%');
+    for (let i = 0; i <= countEmocoes.length; i += 1) {
+      if (countEmocoes[i].countEmocao !== 0) {
+        countEmocoes[i].porcentagem = (
+          (countEmocoes[i].countEmocao / total) *
+          100
+        )
+          .toFixed(2)
+          .toString()
+          .concat('%');
+      }
+    }
+    /**
+    if (countEmocoes[0].countEmocao !== 0) {
+      countEmocoes[0].porcentagem = (
+        (countEmocoes[0].countEmocao / total) *
+        100
+      )
+        .toFixed(2)
+        .toString()
+        .concat('%');
+    }
+    if (countEmocoes[1].countEmocao !== 0) {
+      countEmocoes[1].porcentagem = (
+        (countEmocoes[1].countEmocao / total) *
+        100
+      )
+        .toFixed(2)
+        .toString()
+        .concat('%');
+    }
+    if (countEmocoes[2].countEmocao !== 0) {
+      countEmocoes[2].porcentagem = (
+        (countEmocoes[2].countEmocao / total) *
+        100
+      )
+        .toFixed(2)
+        .toString()
+        .concat('%');
+    }
+    if (countEmocoes[3].countEmocao !== 0) {
+      countEmocoes[3].porcentagem = (
+        (countEmocoes[3].countEmocao / total) *
+        100
+      )
+        .toFixed(2)
+        .toString()
+        .concat('%');
+    }
+    if (countEmocoes[4].countEmocao !== 0) {
+      countEmocoes[4].porcentagem = (
+        (countEmocoes[4].countEmocao / total) *
+        100
+      )
+        .toFixed(2)
+        .toString()
+        .concat('%');
+    }
+    if (countEmocoes[5].countEmocao !== 0) {
+      countEmocoes[5].porcentagem = (
+        (countEmocoes[5].countEmocao / total) *
+        100
+      )
+        .toFixed(2)
+        .toString()
+        .concat('%');
+    }
+    if (countEmocoes[6].countEmocao !== 0) {
+      countEmocoes[6].porcentagem = (
+        (countEmocoes[6].countEmocao / total) *
+        100
+      )
+        .toFixed(2)
+        .toString()
+        .concat('%');
+    } */
 
     console.log('predominante: ', emocao);
     console.log('Vezes Total: ', total);
@@ -579,11 +632,12 @@ const Report = () => {
                 <TempoFrame>
                   <h3>Selecione o intervalo de tempo: </h3>
                   <Radio.Group onChange={onIntervaloChange} value={value}>
-                    <Radio value={2}>2s</Radio>
+                    <Radio value={1}>Todos</Radio>
+                    <Radio value={10}>10s</Radio>
                     <Radio value={30}>30s</Radio>
                     <Radio value={60}>1min</Radio>
                     <Radio value={300}>5min</Radio>
-                    <Radio value={1}>Todos</Radio>
+                    <Radio value={600}>10min</Radio>
                   </Radio.Group>
                 </TempoFrame>
                 <InfoAluno>
