@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import githubBackground from '../assets/github-bg.svg';
 
 export default createGlobalStyle`
   *{
@@ -8,15 +9,16 @@ export default createGlobalStyle`
     outline:0
   }
 
-  body{
-    background:#011818;
-    color: #FFF;
+
+    body{
+    background: rgb(220,176,244) no-repeat 70% top;
+    background: linear-gradient(90deg, rgba(220,176,244,1) 2%, rgba(177,242,237,1) 55%, rgba(240,240,245,1) 100%);
     -webkit-font-smoothing: antialiased;
   }
 
-  body,input, button {
-    font-family:'Roboto Slab', serif;
-    font-size:16px;
+
+  body,input,button{
+    font: 16px Roboto,sans-serif
   }
 
   h1,h2,h3,h4, strong {
