@@ -35,7 +35,7 @@ import 'slick-carousel/slick/slick-theme.css';
 
 const { Header, Footer, Sider, Content } = Layout;
 
-const aulas = [
+let aulas = [
   {
     codAula: '',
     codDisciplina: '',
@@ -431,6 +431,7 @@ const Report = () => {
       .then((results) => results.json())
       .then((results) => {
         if (results.length > 0) {
+          aulas = results;
           setAula(results);
           console.log('aula: ', results);
         } else {
