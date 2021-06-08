@@ -56,8 +56,8 @@ const teste = () => {
       {aulas.map((aula, i) => {
         if (aulas[i] !== null) {
           return (
-            <Menu.Item key="0">
-              <a href="0">{aulas[i].nomeAula}</a>
+            <Menu.Item key={aulas[i].nomeAula}>
+              <a href={aulas[i].nomeAula}>{aulas[i].nomeAula}</a>
             </Menu.Item>
           );
         }
