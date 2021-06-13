@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import React, { createContext, useCallback, useContext, useState } from 'react';
-import api from '../services/api';
+import api from '../services/apiUsuarios';
 
 interface SignInCredentials {
   email: string;
