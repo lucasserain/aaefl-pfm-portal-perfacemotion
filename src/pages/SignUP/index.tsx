@@ -5,8 +5,10 @@ import { Form } from '@unform/web';
 import * as Yup from 'yup';
 import { Link, useHistory } from 'react-router-dom';
 import { FormHandles } from '@unform/core';
+import Popup from 'reactjs-popup';
 import { Container, Content, Background } from './styles';
 import logoImg from '../../assets/logo_small.png';
+import 'reactjs-popup/dist/index.css';
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -102,14 +104,51 @@ const SignUp: React.FC = () => {
             icon={FiLock}
             placeholder="Senha"
           />
-          <input type="checkbox" name="porra" />
           <div className="termo-aceite">
             <input type="checkbox" id="termo" name="termo_aceite" />
-            <label htmlFor="termo">
-              <a href="google.com">
-                Declaro que li e aceito os termos de exibição de imagem
-              </a>
-            </label>
+            <Popup
+              trigger={
+                <span>
+                  {' '}
+                  Declaro que li e aceito os termos de exibição de imagem{' '}
+                </span>
+              }
+              modal
+              nested
+            >
+              {(close: any) => (
+                <div className="modal">
+                  <div className="header"> Termo de aceite </div>
+                  <div className="content">
+                    {' '}
+                    AUTORIZO o uso de minha imagem (ou do menor sob minha
+                    responsabilidade) capturada a partir da plataforma
+                    Perfacemotion, sem finalidade comercial, para ser utilizada
+                    no trabalho de conclusão de curso do projeto Perfacemotion.
+                    <br />A presente autorização é concedida a título gratuito,
+                    abrangendo o uso da imagem acima mencionada em todo
+                    território nacional e no exterior, em todas as suas
+                    modalidades e, em destaque, das seguintes formas:
+                    <br /> (I) trabalho escrito;
+                    <br /> (II) plataforma virtual. Por esta ser a expressão da
+                    minha vontade declaro que autorizo o uso acima descrito sem
+                    que nada haja a ser reclamado a título de direitos conexos à
+                    minha imagem ou a qualquer outro.
+                  </div>
+                  <div className="actions">
+                    <Button
+                      className="button"
+                      onClick={() => {
+                        console.log('modal closed ');
+                        close();
+                      }}
+                    >
+                      Fechar
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </Popup>
           </div>
           <Button type="submit">Cadastrar</Button>
         </Form>

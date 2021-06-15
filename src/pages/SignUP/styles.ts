@@ -13,6 +13,10 @@ export const Content = styled.div`
   align-items: center;
   place-content: center;
 
+  span {
+    cursor: pointer;
+  }
+
   width: 100%;
   max-width: 700px;
 
@@ -94,7 +98,6 @@ export const Content = styled.div`
 `;
 export const Background = styled.div`
   flex: 1;
-  background: url(${signInBackgroundImg}) no-repeat center;
   background-size: cover;
 `;
 
