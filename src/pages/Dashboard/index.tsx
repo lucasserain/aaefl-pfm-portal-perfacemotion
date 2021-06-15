@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import Webcam from 'react-webcam';
-import { Link, useHistory, useRouteMatch } from 'react-router-dom';
-import { FiLogIn, FiMail, FiLock, FiArrowLeft } from 'react-icons/fi';
+import { useHistory, useRouteMatch } from 'react-router-dom';
+import { FiArrowLeft } from 'react-icons/fi';
 import ReactPlayer from 'react-player';
 import { uuid } from 'uuidv4';
 import Button from '../../components/Button';
@@ -39,7 +39,6 @@ const Dashboard: React.FC = () => {
   const history = useHistory();
   const { params } = useRouteMatch<AulasParam>();
   const webcamRef = useRef<Webcam | null>(null);
-  const [imgSrc, setImgSrc] = useState<string | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const [capturing, setCapturing] = React.useState(false);
 

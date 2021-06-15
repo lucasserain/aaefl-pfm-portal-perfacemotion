@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { FiMail, FiLock, FiUser, FiArrowLeft } from 'react-icons/fi';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
@@ -22,20 +22,19 @@ interface SignUpFormData {
 }
 
 const SignUp: React.FC = () => {
-  const formRef = useRef<FormHandles>(null);
-  const { addToast } = useToast();
   const history = useHistory();
+  const { addToast } = useToast();
+  const formRef = useRef<FormHandles>(null);
 
   const handleSubmit = useCallback(
     async (data: SignUpFormData) => {
       try {
         formRef.current?.setErrors({});
-
         const schema = Yup.object().shape({
-          nome: Yup.string().required('Nome obrigatório'),
+          name: Yup.string().required('Nome obrigatório!'),
           email: Yup.string()
-            .required('E-mail obrigatório')
-            .email('Digite um e-mail válido'),
+            .required('E-mail obrigatório!')
+            .email('Digite um e-mail válido!'),
           password: Yup.string().min(6, 'No mínimo 6 dígitos'),
         });
 
@@ -47,37 +46,36 @@ const SignUp: React.FC = () => {
         // eslint-disable-next-line no-param-reassign
         data.cod_tipo_usua = 1;
         await api.post('/usuarios', data);
-        history.push('/');
 
         addToast({
           type: 'success',
           title: 'Cadastro realizado!',
           description: 'Você já pode fazer seu login no Parfacemotion!',
         });
-      } catch (error) {
-        if (error instanceof Yup.ValidationError) {
-          const errors = getValidationErrors(error);
 
+        history.push('/');
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(err);
           formRef.current?.setErrors(errors);
-
-          return;
         }
 
         addToast({
           type: 'error',
-          title: 'Erro no cadastro',
-          description: 'Ocorreu um erro ao fazer o cadastro, tente novamente!',
+          title: 'Erro no cadastro!',
+          description:
+            'Ocorreu um erro ao enviar dados, por favor tente novamente.',
         });
       }
     },
-    [addToast, history],
+    [history, addToast],
   );
   return (
     <Container>
       <Content>
         <img src={logoImg} alt="Parfacemotion" />
 
-        <Form onSubmit={handleSubmit}>
+        <Form ref={formRef} onSubmit={handleSubmit}>
           <h1>Faça seu cadastro</h1>
           <div className="radio-button">
             <input
