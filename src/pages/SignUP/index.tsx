@@ -10,7 +10,7 @@ import logoImg from '../../assets/logo_small.png';
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
-import api from '../../services/api';
+import api from '../../services/apiUsuarios';
 import { useToast } from '../../hooks/toast';
 import getValidationErrors from '../../utils/getValidationErrors';
 
