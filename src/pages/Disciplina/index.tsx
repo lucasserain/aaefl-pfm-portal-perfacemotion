@@ -214,10 +214,7 @@ const Disciplina: React.FC = () => {
                 <Link key={aula.codAula} to={`/record/${aula.codAula}`} />
               )}
               {CheckUserType() === 2 && (
-                <Link
-                  key={aula.codDisciplina}
-                  to={`/report/${aula.codDisciplina}`}
-                />
+                <Link key={aula.codDisciplina} to={`/report/${aula.codAula}`} />
               )}
 
               <strong>{aula.nomeAula}</strong>
