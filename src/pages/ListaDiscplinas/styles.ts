@@ -1,81 +1,70 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-export const Header = styled.header`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+import { shade } from 'polished';
 
-  a {
-    display: flex;
+interface FormProps {
+  hasError: boolean;
+}
+
+// Template literals
+export const Title = styled.h1`
+  font-size: 48px;
+  color: #3a3a3a;
+  max-width: 450px;
+  line-height: 56px;
+  margin-top: 80px;
+`;
+
+export const Form = styled.form<FormProps>`
+  margin-top: 40px;
+  max-width: 200px;
+  input {
+    flex: 1;
+    height: 70px;
+    display: block;
+    padding: 0 24px;
+    margin-top: 10px;
+    border: 0;
+    border-radius: 5px 5px 5px 5px;
+    color: #3a3a3a;
+    border: 2px solid #fff;
+    border-right: 0;
+    ${(props) =>
+      props.hasError &&
+      css`
+        border-color: #c53030;
+      `}
+    &::placeholder {
+      color: #a8a8b3;
+    }
+  }
+  button {
+    width: 210px;
+    height: 70px;
+    background: #04d361;
     align-items: center;
-    text-decoration: none;
-    color: #a8a8b3;
-    transition: color 0.2s;
-
+    border: 0px;
+    border-radius: 5px 0 0 5px;
+    color: #fff;
+    font-weight: bold;
+    transition: background-color 0.2s;
     &:hover {
-      color: #666;
-    }
-
-    svg {
-      margin-right: 4px;
-    }
-  }
-`;
-export const RepositoryInfo = styled.section`
-  margin-top: 80px;
-
-  header {
-    display: flex;
-    align-items: center;
-  }
-
-  img {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-  }
-  div {
-    margin-left: 24px;
-
-    strong {
-      font-size: 36px;
-      color: #3d3d4d;
-    }
-    p {
-      font-size: 18px;
-      color: #737380;
-      margin-top: 4px;
-    }
-  }
-
-  ul {
-    display: flex;
-    list-style: none;
-    margin-top: 40px;
-
-    li {
-      & + li {
-        margin-left: 80px;
-      }
-      strong {
-        display: block;
-        font-size: 36px;
-      }
-
-      span {
-        display: block;
-        margin-top: 4px;
-        color: #6c6c80;
-      }
+      background: ${shade(0.2, '#03d361')};
     }
   }
 `;
 
-export const Issues = styled.div`
+export const Repositories = styled.div`
   margin-top: 80px;
-
+  max-width: 700px;
   a {
-    background: #fff;
+    background: rgb(220, 176, 244) no-repeat 70% top;
+    background: linear-gradient(
+      90deg,
+      rgba(220, 176, 244, 1) 2%,
+      rgba(177, 242, 237, 1) 55%,
+      rgba(240, 240, 245, 1) 100%
+    );
     border-radius: 5px;
     width: 100%;
     padding: 24px;
@@ -84,15 +73,17 @@ export const Issues = styled.div`
     display: flex;
     align-items: center;
     transition: transform 0.2s;
-
     & + a {
       margin-top: 16px;
     }
-
     &:hover {
       transform: translateX(10px);
     }
-
+    img {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+    }
     div {
       margin: 0 16px;
       flex: 1;
@@ -100,7 +91,6 @@ export const Issues = styled.div`
         font-size: 20px;
         color: #3d4d4d;
       }
-
       p {
         font-size: 18px;
         color: #a8a8b3;
@@ -114,60 +104,10 @@ export const Issues = styled.div`
   }
 `;
 
-export const Formulario = styled.div`
-  margin-top: 50px;
-  form {
-    margin: 1px 0;
-    width: 540px;
-    text-align: center;
-
-    h1 {
-      margin-bottom: 24px;
-    }
-
-    a {
-      color: #ffffff;
-      display: block;
-      margin-top: 14px;
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-  }
-
-  Input {
-    height: 10%;
-  }
-
-  a {
-    background: #fff;
-    border-radius: 5px;
-    width: 100%;
-    padding: 24px;
-    display: block;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    transition: transform 0.2s;
-
-    & + a {
-      margin-top: 16px;
-    }
-
-    div {
-      margin: 0 16px;
-      flex: 1;
-      strong {
-        font-size: 10px;
-        color: #3d4d4d;
-      }
-
-      p {
-        font-size: 18px;
-        color: #a8a8b3;
-        margin-top: 4px;
-      }
-    }
-  }
+export const Error = styled.span`
+  display: block;
+  color: #c53030;
+  margin-top: 8px;
 `;
 
 export const ContentWrapper = styled.div`

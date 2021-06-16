@@ -11,6 +11,8 @@ import logoImg from '../../assets/logo_small.png';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import { useAuth } from '../../hooks/AuthContext';
+import { useToast } from '../../hooks/toast';
+import getValidationsErrors from '../../utils/getValidationErrors';
 
 interface SignInFormData {
   email: string;
@@ -19,6 +21,7 @@ interface SignInFormData {
 
 const SignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
+  const { addToast } = useToast();
 
   const { signIn } = useAuth();
   const handleSubmit = useCallback(
@@ -41,21 +44,26 @@ const SignIn: React.FC = () => {
           password: data.password,
         });
       } catch (err) {
-        console.log(err);
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationsErrors(err);
+          formRef.current?.setErrors(errors);
+        }
 
-        // const errors = getValidationErrors(err);
-
-        // formRef.current?.setErrors(errors);
+        addToast({
+          type: 'error',
+          title: 'Erro na autenticação!',
+          description: 'Ocorreu um erro ao fazer login, cheque as credenciais.',
+        });
       }
     },
-    [signIn],
+    [signIn, addToast],
   );
   return (
     <Container>
       <Content>
         <img src={logoImg} alt="Parfacemotion" />
 
-        <Form onSubmit={handleSubmit}>
+        <Form ref={formRef} onSubmit={handleSubmit}>
           <h1>Faça o seu login</h1>
 
           <Input name="email" icon={FiMail} placeholder="E-mail" />
@@ -66,8 +74,6 @@ const SignIn: React.FC = () => {
             placeholder="Senha"
           />
           <Button type="submit">Entrar</Button>
-
-          <a href="forgot">Esqueci minha senha</a>
         </Form>
         <Link to="/signup">
           <FiLogIn />
