@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import ReactPlayer from 'react-player';
 import Slider from 'react-slick';
+import { useRouteMatch } from 'react-router-dom';
 import {
   Layout,
   Descriptions,
@@ -50,14 +51,18 @@ let aulas = [
   },
 ];
 
+interface AulaParam {
+  aula: string;
+}
+
 const teste = () => {
   return (
     <Menu>
       {aulas.map((aula, i) => {
         if (aulas[i] !== null) {
           return (
-            <Menu.Item key="0">
-              <a href="0">{aulas[i].nomeAula}</a>
+            <Menu.Item key={aulas[i].nomeAula}>
+              <a href={aulas[i].nomeAula}>{aulas[i].nomeAula}</a>
             </Menu.Item>
           );
         }
@@ -198,12 +203,26 @@ const Report = () => {
   const [showControl, setShowControl] = useState(true);
   const [nomeAluno, setNomeAluno] = useState('');
   const [emocao, setEmocao] = useState('');
+  const { params } = useRouteMatch<AulaParam>();
   const [intervalo, setIntervalo] = useState(1);
   const [intervalo2, setIntervalo2] = useState(0);
 
   const [curr, setCurr] = useState(0);
 
-  const [aula, setAula] = useState([
+  const [aula, setAula] = useState({
+    codAula: '',
+    codDisciplina: '',
+    inicioAula: '',
+    finalAula: '',
+    duracaoAula: '',
+    dataCriacao: '',
+    dataAlteracao: '',
+    urlVideo: '',
+    nomeAula: '',
+    descricao: '',
+  });
+
+  const [allAulas, setAllAulas] = useState([
     {
       codAula: '',
       codDisciplina: '',
@@ -229,6 +248,37 @@ const Report = () => {
     },
   ]);
 
+  const [resultAll, setResultAll] = useState([
+    {
+      dataAlteracao: '',
+      dataCriacao: '',
+      tempoFrame: '',
+      emocao: '',
+      idFrame: '',
+      urlFrame: '',
+    },
+  ]);
+
+  const [allDisciplinas, setAllDisciplinas] = useState([
+    {
+      codDisciplina: '',
+      nomeDisciplina: '',
+      codProfessor: '',
+      descricao: '',
+      urlFundo: '',
+      alunos: '',
+    },
+  ]);
+
+  const [disciplina, setDisciplina] = useState({
+    codDisciplina: '',
+    nomeDisciplina: '',
+    codProfessor: '',
+    descricao: '',
+    urlFundo: '',
+    alunos: '',
+  });
+
   const [aluno, setAluno] = useState([
     {
       codUsuario: '',
@@ -241,50 +291,53 @@ const Report = () => {
     },
   ]);
 
-  const countEmocoes = [
+  const [countEmocoes, setCountEmocoes] = useState([
     {
       countEmocao: 0,
       string: 'Alegria',
-      porcentagem: '15%',
+      porcentagem: '',
     },
     {
       countEmocao: 0,
       string: 'Tristeza',
-      porcentagem: '1%',
+      porcentagem: '',
     },
     {
       countEmocao: 0,
       string: 'Surpresa',
-      porcentagem: '9%',
+      porcentagem: '',
     },
     {
       countEmocao: 0,
       string: 'Neutro',
-      porcentagem: '70%',
+      porcentagem: '',
     },
     {
       countEmocao: 0,
       string: 'Raiva',
-      porcentagem: '2%',
+      porcentagem: '',
     },
     {
       countEmocao: 0,
       string: 'Nojo',
-      porcentagem: '1%',
+      porcentagem: '',
     },
     {
       countEmocao: 0,
       string: 'Medo',
-      porcentagem: '2%',
+      porcentagem: '',
     },
-  ];
+  ]);
   const player = useRef<ReactPlayer>(null);
 
   const getEmocaoPredominante = (resultado: any[]) => {
+    if (resultado.length === 0) {
+      return null;
+    }
     resultado.forEach((item) => {
       if (item.emocao === 'Alegria') {
         countEmocoes[0].countEmocao += 1;
-      } else if (item.emocao === 'Tristeza') {
+      } else if (item.emocao === 'Triste') {
         countEmocoes[1].countEmocao += 1;
       } else if (item.emocao === 'Surpresa') {
         countEmocoes[2].countEmocao += 1;
@@ -317,29 +370,17 @@ const Report = () => {
     });
 
     setEmocao(predominante);
-
-    countEmocoes[0].porcentagem = ((countEmocoes[0].countEmocao / total) * 100)
-      .toString()
-      .concat('%');
-    countEmocoes[1].porcentagem = ((countEmocoes[1].countEmocao / total) * 100)
-      .toString()
-      .concat('%');
-    countEmocoes[2].porcentagem = ((countEmocoes[2].countEmocao / total) * 100)
-      .toString()
-      .concat('%');
-    countEmocoes[3].porcentagem = ((countEmocoes[3].countEmocao / total) * 100)
-      .toString()
-      .concat('%');
-    countEmocoes[4].porcentagem = ((countEmocoes[4].countEmocao / total) * 100)
-      .toString()
-      .concat('%');
-    countEmocoes[5].porcentagem = ((countEmocoes[5].countEmocao / total) * 100)
-      .toString()
-      .concat('%');
-    countEmocoes[6].porcentagem = ((countEmocoes[6].countEmocao / total) * 100)
-      .toString()
-      .concat('%');
-
+    for (let i = 0; i <= countEmocoes.length; i += 1) {
+      if (countEmocoes[i].countEmocao !== 0) {
+        countEmocoes[i].porcentagem = (
+          (countEmocoes[i].countEmocao / total) *
+          100
+        )
+          .toFixed(2)
+          .toString()
+          .concat('%');
+      }
+    }
     console.log('predominante: ', emocao);
     console.log('Vezes Total: ', total);
 
@@ -424,6 +465,28 @@ const Report = () => {
     return predominante;
   };
 
+  const getAllStudentsEmotionInfo = async (idDisciplina: any, idAula: any) => {
+    await fetch(
+      `https://aaefl-pfm-api-midias.herokuapp.com/relatorios/${idDisciplina}?idAula=${idAula}`, // nao esta retornando nada pq n tem dados na base
+    )
+      .then((results) => results.json())
+      .then((results) => {
+        if (results.length >= 0) {
+          setResultAll(results);
+          getEmocaoPredominante(results);
+          console.log('emoções todos estudantes: ', results);
+        } else {
+          setNomeAluno('Emoção não encontrada!');
+        }
+      })
+      .catch((temErro) => {
+        console.log('erro: ', temErro);
+        setNomeAluno('Erro na api');
+      });
+
+    return result;
+  };
+
   const getAulaInfo = async (idDisciplina: any) => {
     await fetch(
       `https://aaefl-pfm-api-midias.herokuapp.com/disciplina/${idDisciplina}/aulas`, // eae67ff6-0da1-4bb8-a0e4-672dcdfc34cd
@@ -432,8 +495,44 @@ const Report = () => {
       .then((results) => {
         if (results.length > 0) {
           aulas = results;
-          setAula(results);
+          setAllAulas(results);
           console.log('aula: ', results);
+          const idAula = '7289bb79-a997-45f1-82f5-df402503fbf5';
+          // preciso pegar o idAula na url
+          results.map((item: any) => {
+            if (item.codAula === idAula) {
+              console.log('chegou 2?', item);
+              getAllStudentsEmotionInfo(item.codDisciplina, item.codAula);
+              return setAula(item);
+            }
+            return null;
+          });
+        } else {
+          setNomeAluno('Emoção não encontrada!');
+        }
+      })
+      .catch((temErro) => {
+        console.log('erro: ', temErro);
+        setNomeAluno('Erro na api');
+      });
+  };
+
+  const getDisciplina = async () => {
+    await fetch(`https://aaefl-pfm-api-midias.herokuapp.com/disciplina/`)
+      .then((results) => results.json())
+      .then((results) => {
+        if (results.length > 0) {
+          setAllDisciplinas(results);
+          console.log('aqui: ', results);
+          const codMateria = 'b1643bdd-85c4-4460-a805-cd909b6417a2'; // da onde pegar a disciplina?
+          results.map((item: any) => {
+            if (item.codDisciplina === codMateria) {
+              console.log('chegou?', item);
+              getAulaInfo(item.codDisciplina);
+              return setDisciplina(item);
+            }
+            return null;
+          });
         } else {
           setNomeAluno('Emoção não encontrada!');
         }
@@ -459,7 +558,6 @@ const Report = () => {
         );
         setNomeAluno('Carregando...');
         if (results.length >= 0) {
-          // talvez usar o codigo do kejo (discord, index.js) para ordernar o tempo
           setResult(results);
           getEmocaoPredominante(results);
           console.log('jooj: ', results);
@@ -487,7 +585,8 @@ const Report = () => {
           getEmotionInfo(
             '8462bb48-0d8a-46cf-88f4-648fc5b41180',
             '2c026be0-f169-4d21-b34e-2e0d1f36dab3',
-            aluno[0].codUsuario,
+            estudante[0].codUsuario,
+            // aluno[0].codUsuario,
           );
         } else {
           setNomeAluno('Aluno não encontrado!');
@@ -501,11 +600,19 @@ const Report = () => {
     return result;
   };
 
+  const fluxo = () => {
+    getDisciplina();
+    // getAulaInfo(disciplina.codDisciplina);
+    // getAllStudentsEmotionInfo(idDisciplina, idAula);
+  };
+
   useEffect(() => {
+    console.log('aula da url: ', params.aula);
+    fluxo();
     // getEmocaoPredominante(result);
     // getEmocaoPredominanteIntervalo(result, 2);
     // setEmocao(); // getStudentInfo
-    getAulaInfo('eae67ff6-0da1-4bb8-a0e4-672dcdfc34cd');
+    // getAulaInfo('eae67ff6-0da1-4bb8-a0e4-672dcdfc34cd');
   }, [result]);
   // quando colocar um estado no [], ele chama dnv quando ele mudar
 
@@ -568,7 +675,8 @@ const Report = () => {
                   18 de Abril de 2021
                 </Descriptions.Item>
                 <Descriptions.Item label="Aula">
-                  Internet das Coisas
+                  {/* disciplina?.nomeDisciplina && '' */}
+                  {aula?.nomeAula && ''}
                 </Descriptions.Item>
                 <Descriptions.Item label="Professor">
                   Guilherme Wachs
@@ -579,11 +687,12 @@ const Report = () => {
                 <TempoFrame>
                   <h3>Selecione o intervalo de tempo: </h3>
                   <Radio.Group onChange={onIntervaloChange} value={value}>
-                    <Radio value={2}>2s</Radio>
+                    <Radio value={1}>Todos</Radio>
+                    <Radio value={10}>10s</Radio>
                     <Radio value={30}>30s</Radio>
                     <Radio value={60}>1min</Radio>
                     <Radio value={300}>5min</Radio>
-                    <Radio value={1}>Todos</Radio>
+                    <Radio value={600}>10min</Radio>
                   </Radio.Group>
                 </TempoFrame>
                 <InfoAluno>
@@ -607,7 +716,7 @@ const Report = () => {
                     // showImage()
                   }}
                   controls={showControl}
-                  url="https://youtu.be/hmQSYY01iWs"
+                  url={aula.urlVideo}
                   className="area-video"
                 />
                 <div className="emocaoPredominante">
@@ -670,6 +779,34 @@ const Report = () => {
                   return null;
                 })}
               </Slider>
+              {console.log(result)}
+              {result.length > 1 && (
+                <Slider {...settings} className="container">
+                  {resultAll.map((frame, i) => {
+                    // RESULT 2
+                    const index = i * intervalo;
+                    if (resultAll[i * intervalo] === null) {
+                      console.log('null', resultAll[i * intervalo]);
+                    }
+                    if (resultAll[i * intervalo] !== undefined) {
+                      return (
+                        <>
+                          <img
+                            src={resultAll[i * intervalo].urlFrame}
+                            alt="emocao do aluno"
+                            className="imagem"
+                          />
+                          <h2>
+                            {resultAll[i * intervalo].emocao} -{' '}
+                            {resultAll[i * intervalo].tempoFrame}
+                          </h2>
+                        </>
+                      );
+                    }
+                    return null;
+                  })}
+                </Slider>
+              )}
             </Jooj>
           </Content>
         </Layout>
@@ -679,42 +816,3 @@ const Report = () => {
 };
 
 export default Report;
-
-/*
-<Dropdown overlay={menuSemestre} trigger={['click']}>
-                    <Button
-                      className="ant-dropdown-link"
-                      onClick={(e) => e.preventDefault()}
-                    >
-                      Semestre <DownOutlined />
-                    </Button>
-                  </Dropdown>
-*/
-/*
-<Dropdown overlay={menuMateria} trigger={['click']}>
-                    <Button
-                      className="ant-dropdown-link"
-                      onClick={(e) => e.preventDefault()}
-                    >
-                      Matéria <DownOutlined />
-                    </Button>
-                  </Dropdown>
-                  */
-// <h3>{getEmocaoPredominante(result)}</h3>
-
-// <img src="C:\Users\andre\Desktop\TCC\edu.jpg" alt="emocao do aluno" className='imagem'/>
-// <img src={edu} alt="emocao do aluno" className='imagem' />
-// <img src={result[0].url_frame} alt="emocao do aluno" className='imagem'/>
-// <h2>{result[0].emocao}</h2>
-// <img src={result[1].url_frame} alt="emocao do aluno" className='imagem' />
-
-/* { <Player className="area-video"
-                  playsInline
-                  poster="/assets/poster.png"
-                  onChange={onChange}
-                  src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4">
-                    <BigPlayButton position="center" />
-                    <ControlBar autoHide={false} className="display-bar">
-                      <VolumeMenuButton vertical />
-                    </ControlBar>
-                </Player> } */

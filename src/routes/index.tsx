@@ -8,6 +8,8 @@ import Route from './routes';
 import App from '../pages/Recorder/App.js';
 import Report from '../pages/Report';
 import Record from '../pages/Record';
+import CadastroDisciplina from '../pages/CadastroDisciplinas';
+import Disciplina from '../pages/Disciplina';
 
 const Routes: React.FC = () => (
   <Switch>
@@ -16,6 +18,8 @@ const Routes: React.FC = () => (
     <Route path="/report" component={Report} />
     <Route path="/dashboard1" component={Dashboard} />
     <Route path="/teste" component={Record} />
+    <Route path="/caddisciplinas" component={CadastroDisciplina} />
+    <Route path="/disciplinas/:disciplina+" component={Disciplina} />
   </Switch>
 );
 
