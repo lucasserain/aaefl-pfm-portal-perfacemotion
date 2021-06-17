@@ -23,16 +23,22 @@ interface SignUpFormData {
   password: string;
 }
 
+interface tipoUsuario {
+  cod_tipo_usua: number;
+}
+
 const SignUp: React.FC = () => {
   const history = useHistory();
   const { addToast } = useToast();
   const formRef = useRef<FormHandles>(null);
+  const [usuarioTipo, setTipoUsuario] = useState<tipoUsuario>();
   const [checkBox, setCheckBox] = useState<number>();
   let codUsua = 1;
 
   const handleInputChange = (score: number) => {
     codUsua = score;
     setCheckBox(score);
+    setTipoUsuario({ cod_tipo_usua: score });
   };
 
   const handleSubmit = useCallback(
@@ -53,8 +59,8 @@ const SignUp: React.FC = () => {
 
         // Temporario set user type 1
         // eslint-disable-next-line no-param-reassign
-        data.cod_tipo_usua = 1;
-        alert('cheugei');
+        data.cod_tipo_usua = codUsua;
+
         await api.post('/usuarios', data);
 
         addToast({
@@ -95,7 +101,7 @@ const SignUp: React.FC = () => {
               value={1}
               name="tipo_usuario"
               defaultChecked
-              onChange={() => handleInputChange(1)}
+              onChange={(e) => handleInputChange(1)}
             />
             <label htmlFor="radioAluno">Aluno</label>
             <input
@@ -103,7 +109,7 @@ const SignUp: React.FC = () => {
               id="radioProfessor"
               value={2}
               name="tipo_usuario"
-              onChange={() => handleInputChange(2)}
+              onChange={(e) => handleInputChange(2)}
             />
             <label htmlFor="radioProfessor">Professor</label>
           </div>

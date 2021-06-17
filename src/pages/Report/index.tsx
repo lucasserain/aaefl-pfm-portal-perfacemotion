@@ -490,7 +490,6 @@ const Report: React.FC = () => {
   };
 
   const getStudentInfo = async (nome: string) => {
-    alert(nome.length);
     await fetch(
       `https://aaefl-pfm-api-midias.herokuapp.com/usuarios/?nome=${nome}`,
     )
