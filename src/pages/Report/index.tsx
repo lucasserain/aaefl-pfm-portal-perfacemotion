@@ -466,13 +466,39 @@ const Report: React.FC = () => {
     return result;
   };
 
-  const getStudentInfo = async (nome: any) => {
+  const getEmotionInfoAll = async (idAula: any) => {
+    await fetch(
+      `https://aaefl-pfm-api-midias.herokuapp.com/relatorios/aulas/${idAula}`,
+    )
+      .then((results) => results.json())
+      .then((results) => {
+        setNomeAluno('Carregando...');
+        if (results.length >= 0) {
+          setResult(results);
+          getEmocaoPredominante(results);
+          console.log('jooj: ', results);
+        } else {
+          setNomeAluno('Emoção não encontrada!');
+        }
+      })
+      .catch((temErro) => {
+        console.log('erro: ', temErro);
+        setNomeAluno('Erro na api');
+      });
+
+    return result;
+  };
+
+  const getStudentInfo = async (nome: string) => {
+    alert(nome.length);
     await fetch(
       `https://aaefl-pfm-api-midias.herokuapp.com/usuarios/?nome=${nome}`,
     )
       .then((estudante) => estudante.json())
       .then((estudante) => {
-        if (estudante.length > 0) {
+        if (nome.length === 0) {
+          getEmotionInfoAll(aulasApi?.codAula);
+        } else if (estudante.length > 0) {
           setAluno(estudante);
           console.log('Aluno: ', estudante);
           getEmotionInfo(

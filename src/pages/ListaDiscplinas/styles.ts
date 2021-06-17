@@ -173,6 +173,16 @@ export const LeftSideNav = styled.div`
   }
 `;
 
+export const RightSideNav = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+`;
+
 export const LeftSideForm = styled.div`
   display: flex;
   flex-direction: row;

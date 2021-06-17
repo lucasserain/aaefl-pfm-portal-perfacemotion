@@ -9,8 +9,9 @@ import { FiChevronRight } from 'react-icons/fi';
 import { Link, useHistory } from 'react-router-dom';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
-
 import * as Yup from 'yup';
+import { LogoutOutlined } from '@ant-design/icons';
+import { useAuth } from '../../hooks/AuthContext';
 import {
   Repositories,
   Navigation,
@@ -18,6 +19,7 @@ import {
   NavItem,
   ContentWrapper,
   LeftForm,
+  RightSideNav,
 } from './styles';
 import api from '../../services/api';
 import { useToast } from '../../hooks/toast';
@@ -41,6 +43,7 @@ const ListaDisciplina: React.FC = () => {
   const [inputError, setInputError] = useState('');
   const { addToast } = useToast();
   const history = useHistory();
+  const { signOut } = useAuth();
 
   const [disciplinas, setDisciplinas] = useState<Disciplina[]>(() => {
     const storagedRepositories = localStorage.getItem('@Perfacemotion:usuario');
@@ -66,6 +69,9 @@ const ListaDisciplina: React.FC = () => {
     carregaDisciplinas();
   }, []);
 
+  function Logout() {
+    signOut();
+  }
   const handleSubmit = useCallback(
     async (data: Disciplina) => {
       try {
@@ -123,8 +129,15 @@ const ListaDisciplina: React.FC = () => {
     <>
       <Navigation>
         <LeftSideNav>
-          <NavItem>Voltar</NavItem>
+          <NavItem>
+            <Link to="/">Voltar</Link>
+          </NavItem>
         </LeftSideNav>
+        <RightSideNav>
+          <Link to="/" onClick={() => signOut()}>
+            Sair
+          </Link>
+        </RightSideNav>
       </Navigation>
       <ContentWrapper>
         <section className="specialties-container">
