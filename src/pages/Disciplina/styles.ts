@@ -23,6 +23,7 @@ export const Header = styled.header`
 `;
 export const RepositoryInfo = styled.section`
   margin-top: 80px;
+  margin-left: 10px;
 
   header {
     display: flex;
@@ -39,11 +40,11 @@ export const RepositoryInfo = styled.section`
 
     strong {
       font-size: 36px;
-      color: #3d3d4d;
+      color: white;
     }
     p {
       font-size: 18px;
-      color: #737380;
+      color: white;
       margin-top: 4px;
     }
   }
@@ -65,7 +66,7 @@ export const RepositoryInfo = styled.section`
       span {
         display: block;
         margin-top: 4px;
-        color: #6c6c80;
+        color: white;
       }
     }
   }

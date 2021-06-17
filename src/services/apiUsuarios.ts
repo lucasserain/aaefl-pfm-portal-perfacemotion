@@ -1,6 +1,6 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL_USR,
+  baseURL: 'https://aaefl-pfm-api-usuarios.herokuapp.com/',
 });
 export default api;

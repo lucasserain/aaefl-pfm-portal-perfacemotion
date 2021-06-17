@@ -104,6 +104,7 @@ const Disciplina: React.FC = () => {
       setProfessores(response.data);
     });
   }, [params.disciplina]);
+
   /* eslint-disable no-param-reassign */
   const handleSubmit = useCallback(
     async (data: Aulas) => {
@@ -195,7 +196,6 @@ const Disciplina: React.FC = () => {
                       icon={FiUser}
                       placeholder="Insira a url do video"
                     />
-                    <Calendar onChange={onChange} value={value} />
                     <Button type="submit">Cadastrar</Button>
                   </Form>
                 </Formulario>
@@ -214,7 +214,7 @@ const Disciplina: React.FC = () => {
                 <Link key={aula.codAula} to={`/record/${aula.codAula}`} />
               )}
               {CheckUserType() === 2 && (
-                <Link key={aula.codDisciplina} to={`/report/${aula.codAula}`} />
+                <Link key={aula.codAula} to={`/report/${aula.codAula}`} />
               )}
 
               <strong>{aula.nomeAula}</strong>

@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import ReactPlayer from 'react-player';
 import Slider from 'react-slick';
 import { useRouteMatch } from 'react-router-dom';
@@ -10,33 +10,51 @@ import {
   Dropdown,
   Button,
   Input,
-  Result,
 } from 'antd';
-import Icon, {
-  ArrowUpOutlined,
-  ArrowDownOutlined,
+import {
   DownOutlined,
   UserOutlined,
   ArrowRightOutlined,
-  ConsoleSqlOutlined,
 } from '@ant-design/icons';
-import {
-  Container,
-  Contents,
-  Background,
-  Jooj,
-  Selecoes,
-  TempoFrame,
-  InfoAluno,
-} from './styles';
-
+import { Container, Jooj, Selecoes, TempoFrame, InfoAluno } from './styles';
 import './index.css';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import api from '../../services/api';
 
-const { Header, Footer, Sider, Content } = Layout;
+interface Disciplina {
+  codDisciplina: string;
+  nomeDisciplina: string;
+  codProfessor: string;
+  descricao: string;
+  urlFundo: string;
+}
+interface Alunos {
+  codUsuario: string;
+  nome: string;
+  urlAvatar: string;
+}
 
-let aulas = [
+interface AulasApi {
+  codAula: string;
+  codDisciplina: string;
+  nomeDisciplina: string;
+  descricao: string;
+  codProfessor: string;
+  urlFundo: string;
+  nomeAula: string;
+  duracaoAula: number;
+  inicioAula: string;
+  finalAula: string;
+  urlVideo: string;
+}
+interface Professor {
+  nome: string;
+}
+
+const { Content } = Layout;
+
+const aulas = [
   {
     codAula: '',
     codDisciplina: '',
@@ -50,10 +68,6 @@ let aulas = [
     descricao: '',
   },
 ];
-
-interface AulaParam {
-  aula: string;
-}
 
 const teste = () => {
   return (
@@ -76,136 +90,41 @@ const teste = () => {
   );
 };
 
-const menuAula = aulas.map((frame, i) => {
-  if (aulas[i] === null) {
-    console.log('null', aulas[i]);
-    return (
-      <Menu>
-        <Menu.Item key="0">
-          <a href="0">Sem aulas</a>
-        </Menu.Item>
-      </Menu>
-    );
-  }
+interface AulasParam {
+  aula: string;
+}
 
-  if (aulas[i] !== undefined) {
-    // console.log('intervalo: ', index, result[i * intervalo]);
-    return (
-      <Menu>
-        <Menu.Item key="0">
-          <a href="0">{aulas[i].nomeAula}</a>
-        </Menu.Item>
-      </Menu>
-    );
-  }
-  return (
-    <Menu>
-      <Menu.Item key="0">
-        <a href="0">Sem aulas</a>
-      </Menu.Item>
-    </Menu>
-  );
-});
-/** 
-  <Menu>
-    <Menu.Item key="0">
-      <a href="1">{aula[0].nomeAula}</a>
-    </Menu.Item>
-    <Menu.Item key="1">
-      <a href="2">{aula[1].nomeAula}</a>
-    </Menu.Item>
-    <Menu.Item key="3">
-      <a href="3">Cortando o bacon e linguiça - 05/03/2021</a>
-    </Menu.Item>
-    <Menu.Item key="4">
-      <a href="4">Colocando no fogo - 23/03/2021</a>
-    </Menu.Item>
-    <Menu.Item key="5">
-      <a href="5">Adicionando o tempero - 07/04/2021</a>
-    </Menu.Item>
-    <Menu.Item key="6">
-      <a href="6">Servindo - 25/04/2021</a>
-    </Menu.Item>
-    <Menu.Divider />
-    <Menu.Item key="7">Todas as aulas</Menu.Item>
-  </Menu> */
-
-const menuSemestre = (
-  <Menu>
-    <Menu.Item key="0">
-      <a href="1">Semestre 1</a>
-    </Menu.Item>
-    <Menu.Item key="1">
-      <a href="2">Semestre 2</a>
-    </Menu.Item>
-    <Menu.Item key="3">
-      <a href="3">Semestre 3</a>
-    </Menu.Item>
-    <Menu.Item key="4">
-      <a href="4">Semestre 4</a>
-    </Menu.Item>
-    <Menu.Item key="5">
-      <a href="5">Semestre 5</a>
-    </Menu.Item>
-    <Menu.Item key="6">
-      <a href="6">Semestre 6</a>
-    </Menu.Item>
-    <Menu.Item key="7">
-      <a href="7">Semestre 7</a>
-    </Menu.Item>
-    <Menu.Item key="8">
-      <a href="8">Semestre 8</a>
-    </Menu.Item>
-    <Menu.Divider />
-    <Menu.Item key="9">Todos</Menu.Item>
-  </Menu>
-);
-
-const menuMateria = (
-  <Menu>
-    <Menu.Item key="0">
-      <a href="1">Banco de Dados</a>
-    </Menu.Item>
-    <Menu.Item key="1">
-      <a href="2">Calculo 2</a>
-    </Menu.Item>
-    <Menu.Item key="3">
-      <a href="3">Sociologia</a>
-    </Menu.Item>
-    <Menu.Item key="4">
-      <a href="4">Orientação a Objetos</a>
-    </Menu.Item>
-    <Menu.Item key="5">
-      <a href="5">TCC 2</a>
-    </Menu.Item>
-    <Menu.Item key="6">
-      <a href="6">Gestão de Software</a>
-    </Menu.Item>
-    <Menu.Divider />
-    <Menu.Item key="7">Todas as matérias</Menu.Item>
-  </Menu>
-);
-
-const resultDefault = [
-  {
-    cod_frame: '',
-    dt_alte: '',
-    dt_cria: '',
-    name: '-',
-    ra: '-',
-    url_frame: '',
-    emocao: '',
-  },
-];
-
-const Report = () => {
+const Report: React.FC = () => {
+  const { params } = useRouteMatch<AulasParam>();
   const [value, setValue] = useState(1);
   const [showControl, setShowControl] = useState(true);
   const [nomeAluno, setNomeAluno] = useState('');
   const [emocao, setEmocao] = useState('');
-  const { params } = useRouteMatch<AulaParam>();
   const [intervalo, setIntervalo] = useState(1);
   const [intervalo2, setIntervalo2] = useState(0);
+  const [disciplinas, setDisciplinas] = useState<Disciplina | null>(null);
+  const [alunos, setAlunos] = useState<Alunos[]>([]);
+  const [professores, setProfessores] = useState<Professor | null>(null);
+  const [aulasApi, setAulas] = useState<AulasApi>();
+
+  useEffect(() => {
+    api.get(`aulas/${params.aula}`).then((response) => {
+      setAulas(response.data);
+      api
+        .get(`disciplina/${aulasApi?.codDisciplina}/professor`)
+        .then((response2) => {
+          setProfessores(response2.data);
+        });
+    });
+
+    api.get(`disciplina/${params.aula}/alunos`).then((response) => {
+      setAlunos(response.data);
+    });
+
+    api.get(`aulas/${params.aula}`).then((response) => {
+      setAulas(response.data);
+    });
+  }, [params.aula]);
 
   const [curr, setCurr] = useState(0);
 
@@ -465,9 +384,9 @@ const Report = () => {
     return predominante;
   };
 
-  const getAllStudentsEmotionInfo = async (idDisciplina: any, idAula: any) => {
+  const getAllStudentsEmotionInfo = async (idAula: any) => {
     await fetch(
-      `https://aaefl-pfm-api-midias.herokuapp.com/relatorios/${idDisciplina}?idAula=${idAula}`, // nao esta retornando nada pq n tem dados na base
+      `https://aaefl-pfm-api-midias.herokuapp.com/relatorios/aulas/${idAula}`, // nao esta retornando nada pq n tem dados na base
     )
       .then((results) => results.json())
       .then((results) => {
@@ -488,33 +407,11 @@ const Report = () => {
   };
 
   const getAulaInfo = async (idDisciplina: any) => {
-    await fetch(
-      `https://aaefl-pfm-api-midias.herokuapp.com/disciplina/${idDisciplina}/aulas`, // eae67ff6-0da1-4bb8-a0e4-672dcdfc34cd
-    )
-      .then((results) => results.json())
-      .then((results) => {
-        if (results.length > 0) {
-          aulas = results;
-          setAllAulas(results);
-          console.log('aula: ', results);
-          const idAula = '7289bb79-a997-45f1-82f5-df402503fbf5';
-          // preciso pegar o idAula na url
-          results.map((item: any) => {
-            if (item.codAula === idAula) {
-              console.log('chegou 2?', item);
-              getAllStudentsEmotionInfo(item.codDisciplina, item.codAula);
-              return setAula(item);
-            }
-            return null;
-          });
-        } else {
-          setNomeAluno('Emoção não encontrada!');
-        }
-      })
-      .catch((temErro) => {
-        console.log('erro: ', temErro);
-        setNomeAluno('Erro na api');
-      });
+    const idAula = aulasApi?.codAula;
+
+    if (idAula) {
+      getAllStudentsEmotionInfo(idAula);
+    }
   };
 
   const getDisciplina = async () => {
@@ -524,11 +421,11 @@ const Report = () => {
         if (results.length > 0) {
           setAllDisciplinas(results);
           console.log('aqui: ', results);
-          const codMateria = 'b1643bdd-85c4-4460-a805-cd909b6417a2'; // da onde pegar a disciplina?
+          const codMateria = '11de6332-bcf2-4d29-ac72-8611478e01ac'; // da onde pegar a disciplina?
           results.map((item: any) => {
             if (item.codDisciplina === codMateria) {
               console.log('chegou?', item);
-              getAulaInfo(item.codDisciplina);
+              // getAulaInfo(item.codDisciplina);
               return setDisciplina(item);
             }
             return null;
@@ -543,18 +440,14 @@ const Report = () => {
       });
   };
 
-  const getEmotionInfo = async (
-    idDisciplina: any,
-    idAula: any,
-    idAluno: any,
-  ) => {
+  const getEmotionInfo = async (idAula: any, idAluno: any) => {
     await fetch(
-      `https://aaefl-pfm-api-midias.herokuapp.com/relatorios/${idDisciplina}?idAula=${idAula}&idAluno=${idAluno}`,
+      `https://aaefl-pfm-api-midias.herokuapp.com/relatorios/aulas/${idAula}?idAluno=${idAluno}`,
     )
       .then((results) => results.json())
       .then((results) => {
         console.log(
-          `https://aaefl-pfm-api-midias.herokuapp.com/relatorios/${idDisciplina}?idAula=${idAula}&idAluno=${idAluno}`,
+          `https://aaefl-pfm-api-midias.herokuapp.com/relatorios/aulas/${idAula}?idAluno=${idAluno}`,
         );
         setNomeAluno('Carregando...');
         if (results.length >= 0) {
@@ -583,8 +476,7 @@ const Report = () => {
           setAluno(estudante);
           console.log('Aluno: ', estudante);
           getEmotionInfo(
-            '8462bb48-0d8a-46cf-88f4-648fc5b41180',
-            '2c026be0-f169-4d21-b34e-2e0d1f36dab3',
+            aulasApi?.codAula,
             estudante[0].codUsuario,
             // aluno[0].codUsuario,
           );
@@ -601,13 +493,13 @@ const Report = () => {
   };
 
   const fluxo = () => {
-    getDisciplina();
+    // getDisciplina();
     // getAulaInfo(disciplina.codDisciplina);
     // getAllStudentsEmotionInfo(idDisciplina, idAula);
   };
 
   useEffect(() => {
-    console.log('aula da url: ', params.aula);
+    // console.log('aula da url: ', params.aula);
     fluxo();
     // getEmocaoPredominante(result);
     // getEmocaoPredominanteIntervalo(result, 2);
@@ -665,21 +557,20 @@ const Report = () => {
           <Content>
             <Jooj className="jooj">
               <Descriptions title="Informações do Aluno/Turma">
-                <Descriptions.Item label="Nome">
+                <Descriptions.Item label="Nome do Aluno">
                   {aluno[0].nome}
                 </Descriptions.Item>
-                <Descriptions.Item label="E-mail">
+                <Descriptions.Item label="E-mail do Aluno">
                   {aluno[0].email}
                 </Descriptions.Item>
-                <Descriptions.Item label="Data">
-                  18 de Abril de 2021
+                <Descriptions.Item label="Data da aula">
+                  {aulasApi?.inicioAula}
                 </Descriptions.Item>
                 <Descriptions.Item label="Aula">
-                  {/* disciplina?.nomeDisciplina && '' */}
-                  {aula?.nomeAula && ''}
+                  {aulasApi?.nomeAula}
                 </Descriptions.Item>
                 <Descriptions.Item label="Professor">
-                  Guilherme Wachs
+                  {professores?.nome}
                 </Descriptions.Item>
                 <Descriptions.Item label="Semestre">8°</Descriptions.Item>
               </Descriptions>
@@ -695,16 +586,7 @@ const Report = () => {
                     <Radio value={600}>10min</Radio>
                   </Radio.Group>
                 </TempoFrame>
-                <InfoAluno>
-                  <Dropdown overlay={teste} trigger={['click']}>
-                    <Button
-                      className="ant-dropdown-link"
-                      onClick={(e) => e.preventDefault()} /* setAula() */
-                    >
-                      Aula <DownOutlined />
-                    </Button>
-                  </Dropdown>
-                </InfoAluno>
+                <InfoAluno />
               </Selecoes>
 
               <div className="videoEmocoes">
@@ -716,7 +598,7 @@ const Report = () => {
                     // showImage()
                   }}
                   controls={showControl}
-                  url={aula.urlVideo}
+                  url={aulasApi?.urlVideo}
                   className="area-video"
                 />
                 <div className="emocaoPredominante">
@@ -788,21 +670,7 @@ const Report = () => {
                     if (resultAll[i * intervalo] === null) {
                       console.log('null', resultAll[i * intervalo]);
                     }
-                    if (resultAll[i * intervalo] !== undefined) {
-                      return (
-                        <>
-                          <img
-                            src={resultAll[i * intervalo].urlFrame}
-                            alt="emocao do aluno"
-                            className="imagem"
-                          />
-                          <h2>
-                            {resultAll[i * intervalo].emocao} -{' '}
-                            {resultAll[i * intervalo].tempoFrame}
-                          </h2>
-                        </>
-                      );
-                    }
+
                     return null;
                   })}
                 </Slider>

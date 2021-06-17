@@ -11,9 +11,8 @@ export default createGlobalStyle`
 
 
     body{
-    background: rgb(220,176,244) no-repeat 70% top;
-    background: linear-gradient(90deg, rgba(220,176,244,1) 2%, rgba(177,242,237,1) 55%, rgba(240,240,245,1) 100%);
-    -webkit-font-smoothing: antialiased;
+      background: rgb(116,44,217);
+background: linear-gradient(90deg, rgba(116,44,217,1) 0%, rgba(41,140,218,0.6446953781512605) 59%, rgba(147,147,250,1) 80%);
   }
 
 

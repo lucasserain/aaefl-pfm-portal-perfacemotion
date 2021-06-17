@@ -27,13 +27,20 @@ const SignUp: React.FC = () => {
   const history = useHistory();
   const { addToast } = useToast();
   const formRef = useRef<FormHandles>(null);
+  const [checkBox, setCheckBox] = useState<number>();
+  let codUsua = 1;
+
+  const handleInputChange = (score: number) => {
+    codUsua = score;
+    setCheckBox(score);
+  };
 
   const handleSubmit = useCallback(
     async (data: SignUpFormData) => {
       try {
         formRef.current?.setErrors({});
         const schema = Yup.object().shape({
-          name: Yup.string().required('Nome obrigatório!'),
+          nome: Yup.string().required('Nome obrigatório!'),
           email: Yup.string()
             .required('E-mail obrigatório!')
             .email('Digite um e-mail válido!'),
@@ -47,6 +54,7 @@ const SignUp: React.FC = () => {
         // Temporario set user type 1
         // eslint-disable-next-line no-param-reassign
         data.cod_tipo_usua = 1;
+        alert('cheugei');
         await api.post('/usuarios', data);
 
         addToast({
@@ -59,6 +67,7 @@ const SignUp: React.FC = () => {
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err);
+          console.log(errors);
           formRef.current?.setErrors(errors);
         }
 
@@ -83,16 +92,18 @@ const SignUp: React.FC = () => {
             <input
               type="radio"
               id="radioAluno"
-              value="Aluno"
+              value={1}
               name="tipo_usuario"
               defaultChecked
+              onChange={() => handleInputChange(1)}
             />
             <label htmlFor="radioAluno">Aluno</label>
             <input
               type="radio"
               id="radioProfessor"
-              value="Professor"
+              value={2}
               name="tipo_usuario"
+              onChange={() => handleInputChange(2)}
             />
             <label htmlFor="radioProfessor">Professor</label>
           </div>
